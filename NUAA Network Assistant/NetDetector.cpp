@@ -100,6 +100,7 @@ BOOL NetDetector::ObtainInformation(NetInfo & info)
 	info.sLocalIp = pSelectedAdapter->IpAddressList.IpAddress.String;
 	info.sLocalMask = pSelectedAdapter->IpAddressList.IpMask.String;
 	info.sGatewayIp = pSelectedAdapter->GatewayList.IpAddress.String;
+	info.sAdapterName = pSelectedAdapter->AdapterName;
 	info.sAdapterDesc = pSelectedAdapter->Description;
 	memcpy(info.localMac, pSelectedAdapter->Address, 6);
 	info.sLocalMac.Format(_T("%02X-%02X-%02X-%02X-%02X-%02X"),

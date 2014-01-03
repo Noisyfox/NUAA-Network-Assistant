@@ -3,7 +3,7 @@
 #include <atlstr.h>
 
 typedef struct {
-	CString sAdapterDesc;
+	CString sAdapterDesc, sAdapterName;
 	CString sLocalIp, sLocalMask, sLocalMac;
 	CString sGatewayIp, sGatewayMac;
 
