@@ -1,0 +1,365 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "atlres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(简体，中国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_SELECTADAPTER DIALOGEX 0, 0, 227, 142
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "选择网络适配器"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_ADAPTERLIST,14,23,200,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "确定",IDOK,97,121,50,14
+    PUSHBUTTON      "取消",IDCANCEL,170,121,50,14
+    LTEXT           "检测到的适配器:",IDC_STATIC,14,11,60,8
+    GROUPBOX        "Static",IDC_GROUP_NETINFO,14,40,200,75
+    LTEXT           "mac 地址:",IDC_STATIC,21,55,38,8
+    LTEXT           "ip 地址:",IDC_STATIC,21,66,31,8
+    LTEXT           "子网掩码:",IDC_STATIC,21,77,36,8
+    LTEXT           "默认网关:",IDC_STATIC,21,88,36,8
+    LTEXT           "网关 mac:",IDC_STATIC,21,99,38,8
+    LTEXT           "00-00-00-00-00-00",IDC_NETINFO_LOCMAC,73,55,70,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_LOCIP,73,66,70,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_LOCMASK,73,77,70,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_GATEWAYIP,73,88,70,8
+    LTEXT           "00-00-00-00-00-00",IDC_NETINFO_GATEWAYMAC,73,99,70,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_SELECTADAPTER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 220
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 135
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_NOTIMENU MENU
+BEGIN
+    POPUP "Noti"
+    BEGIN
+        MENUITEM "局域网直连",                       ID_NOTI_ENLAN
+        MENUITEM "广播转发",                        ID_NOTI_ENREDI
+        MENUITEM "校园网访问",                       ID_NOTI_ENCAMPUS
+        MENUITEM SEPARATOR
+        MENUITEM "关闭",                          IDCANCEL
+    END
+END
+
+#endif    // 中文(简体，中国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 英语(美国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 177, 109
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,120,88,50,14
+    CTEXT           "NUAA Network Assistant v1.0\n\n(c) Copyright 2014",IDC_STATIC,4,57,78,32
+    ICON            IDR_MAINFRAME,IDC_STATIC,34,26,21,20
+    GROUPBOX        "",IDC_STATIC,7,7,72,95
+    LTEXT           "By Noisyfox at NUAA\n\nGreat thanks to\n\nYeahO_O Yuan\nlquterqtd\n\nfor their awsome work.",IDC_STATIC,85,15,85,63
+END
+
+IDD_MAINDLG DIALOGEX 0, 0, 349, 167
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "NUAA Network Assistant"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    PUSHBUTTON      "&About",ID_APP_ABOUT,292,146,50,14
+    GROUPBOX        "Current Adapter",IDC_STATIC,172,7,170,92
+    LTEXT           "Adapter Name:",IDC_STATIC,178,20,50,8
+    LTEXT           "Local Ip:",IDC_STATIC,178,32,28,8
+    LTEXT           "Subnet Mask:",IDC_STATIC,178,44,44,8
+    LTEXT           "Default Gateway:",IDC_STATIC,178,56,58,8
+    LTEXT           "Gateway Mac:",IDC_STATIC,178,68,47,8
+    LTEXT           "",IDC_NETINFO_ADAPNAME,239,20,95,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_LOCIP,239,33,95,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_LOCMASK,239,44,95,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_GATEWAYIP,239,56,95,8
+    LTEXT           "00-00-00-00-00-00",IDC_NETINFO_GATEWAYMAC,239,68,95,8
+    PUSHBUTTON      "Change",IDC_CHANGEADAP,289,82,50,14
+    GROUPBOX        "Network Tools",IDC_STATIC,7,7,165,153
+    CONTROL         "Enable direct LAN connection",IDC_CHECK_ENABLELAN,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,20,109,10
+    CONTROL         "Enable broadcast redirection",IDC_CHECK_ENABLEREDI,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,35,107,10
+    CONTROL         "Enable campus network with outer net",IDC_CHECK_ENABLECAMPUS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,50,139,10
+    CONTROL         "Enable wifi share with Tianyi campus",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,15,65,132,10
+    GROUPBOX        "Tianyi Dialer",IDC_STATIC,14,80,152,73
+    LTEXT           "Account:",IDC_STATIC,20,94,30,8
+    EDITTEXT        IDC_EDIT1,59,91,101,14,ES_AUTOHSCROLL | WS_DISABLED
+    LTEXT           "Password:",IDC_STATIC,20,114,34,8
+    EDITTEXT        IDC_EDIT2,59,111,102,14,ES_PASSWORD | ES_AUTOHSCROLL | WS_DISABLED
+    PUSHBUTTON      "Connect",IDC_BUTTON1,111,132,50,14,WS_DISABLED
+    LTEXT           "Not connected.",IDC_STATIC,20,135,85,8,WS_DISABLED
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 170
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 102
+    END
+
+    IDD_MAINDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 342
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 160
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""atlres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\NUAA Network Assistant.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "FileDescription", "NUAA Network Assistant Module"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "NUAA Network Assistant"
+            VALUE "LegalCopyright", "Copyright 2014"
+            VALUE "OriginalFilename", "NUAA Network Assistant.exe"
+            VALUE "ProductName", "NUAA Network Assistant Module"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "NUAA Network Assistant"
+    IDS_EXIT_CONFIRM        "Are you sure to exit?"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
+    ID_FILE_PRINT           "Print the active document\nPrint"
+    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_SCSIZE          "Change the window size"
+    ATL_IDS_SCMOVE          "Change the window position"
+    ATL_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    ATL_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    ATL_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    ATL_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    ATL_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_SCRESTORE       "Restore the window to normal size"
+    ATL_IDS_SCTASKLIST      "Activate Task List"
+    ATL_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_MRU_FILE        "Open this document"
+END
+
+#endif    // 英语(美国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
