@@ -105,8 +105,9 @@ BOOL TianyiDial::Dial(NetInfo adapter, CString account, CString passwd)
 
 		ZeroMemory(lpRasEntry, sizeof(RASENTRY));
 		lpRasEntry->dwSize = dwBufferSize;
-		lpRasEntry->dwfOptions = RASEO_PreviewUserPw | RASEO_RemoteDefaultGateway; // RASEO_PreviewUserPw需要显示ui
+		lpRasEntry->dwfOptions = RASEO_PreviewUserPw | RASEO_RemoteDefaultGateway | RASEO_RequireCHAP; // RASEO_PreviewUserPw需要显示ui
 		lpRasEntry->dwType = RASET_Broadband;
+		lpRasEntry->dwEncryptionType = ET_Optional;
 
 		lstrcpy(lpRasEntry->szDeviceType, RASDT_PPPoE);
 		lstrcpy(lpRasEntry->szDeviceName, _T(""));
