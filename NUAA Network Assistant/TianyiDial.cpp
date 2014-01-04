@@ -87,9 +87,42 @@ BOOL TianyiDial::Dial(NetInfo adapter, CString account, CString passwd)
 	//str.Format(_T("正在使用动态密码 %s 拨号..."), code);
 	//m_statusbar.SetPaneText(0, str);
 
+	{
+		//创建拨号连接
+		LPRASENTRY lpRasEntry = NULL;
+		DWORD cb = sizeof(RASENTRY);
+		DWORD dwBufferSize = 0;
+		DWORD dwRet = 0;
+
+		// 取得entry的大小,这句也不知道是不是必须的,因为sizeof(RASENTRY)和这里取到的dwBufferSize是一样的,不过还是Get一下安全点
+		RasGetEntryProperties(NULL, _T(""), NULL, &dwBufferSize, NULL, NULL);
+		if (dwBufferSize == 0)
+			return FALSE;
+
+		lpRasEntry = (LPRASENTRY)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwBufferSize);
+		if (lpRasEntry == NULL)
+			return FALSE;
+
+		ZeroMemory(lpRasEntry, sizeof(RASENTRY));
+		lpRasEntry->dwSize = dwBufferSize;
+		lpRasEntry->dwfOptions = RASEO_PreviewUserPw | RASEO_RemoteDefaultGateway; // RASEO_PreviewUserPw需要显示ui
+		lpRasEntry->dwType = RASET_Broadband;
+
+		lstrcpy(lpRasEntry->szDeviceType, RASDT_PPPoE);
+		lstrcpy(lpRasEntry->szDeviceName, _T(""));
+		lpRasEntry->dwfNetProtocols = RASNP_Ip;
+		lpRasEntry->dwFramingProtocol = RASFP_Ppp;
+
+		dwRet = RasSetEntryProperties(NULL, _T("Vnet_PPPoE"), lpRasEntry, dwBufferSize, NULL, 0); // 创建连接
+		HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasEntry);
+
+		if (dwRet != 0)
+			return FALSE;
+	}
+
 	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
 	rdParams.dwSize = sizeof(RASDIALPARAMS);
-	lstrcpy(rdParams.szEntryName, _T("宽带连接"));
+	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
 	lstrcpy(rdParams.szUserName, account);
 	lstrcpy(rdParams.szPassword, passwd);
 
