@@ -1,10 +1,13 @@
 //天翼chap拨号补丁 by YeahO_O Yuan
+//Modified by Noisyfox
+#pragma once
 
 #ifndef TYDIAL_HPP_
 #define TYDIAL_HPP_
 
 #include "md5.h"
 #include "pcap.h"
+#include <ctime>
 
 #ifndef WIN32
 #include <sys/socket.h>
@@ -23,8 +26,15 @@ public:
 		fp = NULL;
 	}
 
+	~TyDial()
+	{
+		Clean();
+	}
+
 	bool Init(char * pcap_dev_name)
 	{
+		if (fp != NULL)return false;
+
 		// 打开 interface
 
 		if ((fp = pcap_open(pcap_dev_name, 
@@ -49,13 +59,25 @@ public:
 			< 0)
 		{
 			printf("Compile error: %s\n", pcap_geterr(fp));
+			Clean();
 			return false;
 		}
 		if (pcap_setfilter(fp, &fcode) < 0)
 		{
 			printf("Set filter error: %s\n", pcap_geterr(fp));
+			Clean();
 			return false;
 		}
+
+		return true;
+	}
+
+	bool Clean()
+	{
+		if (fp == NULL) return true;
+
+		pcap_close(fp);
+		fp = NULL;
 
 		return true;
 	}
@@ -110,15 +132,19 @@ public:
 		如果提供用户名和密码，则在收到 Challenge 包后马上发出 Response；
 		否则在抓到本机发出的 Response 包时，发出正确的 Response。(貌似慢了0.0005秒)
 	*/
-	void PatchAuth(const char * name = NULL, const char * pwd = NULL)
+	void PatchAuth(const time_t timeout = -1, const char * name = NULL, const char * pwd = NULL)
 	{
 		int ret;
 		struct pcap_pkthdr *header;
 		const u_char *pkt_data;
 
+		time_t start_time, curr_time;
+		start_time = curr_time = time(NULL);
+
 		flag_cancel = false;
 		printf("Listening...\n");
-		while (!flag_cancel)
+		for (; !flag_cancel && (timeout <= 0 || curr_time - start_time < timeout);
+			curr_time = time(NULL))
 		{
 			ret = pcap_next_ex(fp, &header, &pkt_data);
 
@@ -155,6 +181,11 @@ public:
 			}
 
 		}
+	}
+
+	void Cancel()
+	{
+		flag_cancel = true;
 	}
 
 	void TakeDownChallenge(const u_char * data)
