@@ -13,6 +13,7 @@ NetDetector _NetDetector;
 NetInfo _NetInfo;
 ArpHacker _ArpHacker;
 RouteHacker _RouteHacker;
+NAT _NAT;
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpstrCmdLine*/, int /*nCmdShow*/)
 {

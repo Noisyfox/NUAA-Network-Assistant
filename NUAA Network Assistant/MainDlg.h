@@ -18,7 +18,7 @@ private:
 	BOOL CreateNotificationIcon();
 	BOOL DeleteNotificationIcon();
 
-	CButton m_btnEnableLan, m_btnEnableCampus;
+	CButton m_btnEnableLan, m_btnEnableRedi, m_btnEnableCampus;
 public:
 
 	CMainDlg();
@@ -35,8 +35,10 @@ public:
 		COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 		COMMAND_ID_HANDLER(IDC_CHANGEADAP, OnChangeAdapter)
 		COMMAND_ID_HANDLER(IDC_CHECK_ENABLELAN, OnEnableLanClicked)
+		COMMAND_ID_HANDLER(IDC_CHECK_ENABLEREDI, OnEnableRediClicked)
 		COMMAND_ID_HANDLER(IDC_CHECK_ENABLECAMPUS, OnEnableCampusClicked)
 		COMMAND_ID_HANDLER(ID_NOTI_ENLAN, OnNotiToggleEnableLan)
+		COMMAND_ID_HANDLER(ID_NOTI_ENREDI, OnNotiToggleEnableRedi)
 		COMMAND_ID_HANDLER(ID_NOTI_ENCAMPUS, OnNotiToggleCampusNet)
 	END_MSG_MAP()
 
@@ -55,7 +57,9 @@ public:
 	LRESULT OnCancel(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnChangeAdapter(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnEnableLanClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnEnableRediClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnEnableCampusClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnNotiToggleEnableLan(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnNotiToggleEnableRedi(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnNotiToggleCampusNet(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 };

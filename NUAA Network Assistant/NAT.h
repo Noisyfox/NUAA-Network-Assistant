@@ -17,8 +17,8 @@ private:
 	std::mutex * m_service_mutex;
 	NetInfo netInfo;
 
-	friend void NATThread(NAT& nat);
-	friend void broadcast(NAT& nat, pcap_t * fp, bpf_u_int32 len, const u_char * data);
+	friend void NATThread(NAT* nat);
+	friend void broadcast(NAT* nat, pcap_t * fp, bpf_u_int32 len, const u_char * data);
 public:
 	NAT();
 	~NAT();

@@ -45,6 +45,7 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	SetIcon(hIconSmall, FALSE);
 
 	m_btnEnableLan = GetDlgItem(IDC_CHECK_ENABLELAN);
+	m_btnEnableRedi = GetDlgItem(IDC_CHECK_ENABLEREDI);
 	m_btnEnableCampus = GetDlgItem(IDC_CHECK_ENABLECAMPUS);
 
 	CreateNotificationIcon();
@@ -78,6 +79,7 @@ LRESULT CMainDlg::OnCancel(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOO
 
 	if (_ArpHacker.IsArpHacked())_ArpHacker.FlushArp();
 	if (_RouteHacker.IsRouteHacked())_RouteHacker.FlushRoute();
+	_NAT.Uninstall();
 
 	EndDialog(wID);
 	return 0;
@@ -115,6 +117,24 @@ LRESULT CMainDlg::OnEnableLanClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*
 	return 0;
 }
 
+LRESULT CMainDlg::OnEnableRediClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	BOOL check = m_btnEnableRedi.GetCheck();
+
+	if (check){
+		int nRet = _NAT.Setup(_NetInfo);
+		if (nRet != NO_ERROR && nRet != ERROR_SERVICE_ALREADY_RUNNING)
+		{
+			m_btnEnableRedi.SetCheck(FALSE);
+		}
+	}
+	else {
+		_NAT.Uninstall();
+	}
+
+	return 0;
+}
+
 LRESULT CMainDlg::OnEnableCampusClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
 	BOOL check = m_btnEnableCampus.GetCheck();
@@ -135,6 +155,13 @@ LRESULT CMainDlg::OnNotiToggleEnableLan(WORD /*wNotifyCode*/, WORD /*wID*/, HWND
 {
 	m_btnEnableLan.SetCheck(!m_btnEnableLan.GetCheck());
 	SendMessage(WM_COMMAND, IDC_CHECK_ENABLELAN, NULL);
+	return 0;
+}
+
+LRESULT CMainDlg::OnNotiToggleEnableRedi(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	m_btnEnableRedi.SetCheck(!m_btnEnableRedi.GetCheck());
+	SendMessage(WM_COMMAND, IDC_CHECK_ENABLEREDI, NULL);
 	return 0;
 }
 
@@ -177,6 +204,7 @@ LRESULT CMainDlg::OnNoti(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bH
 						 menu.LoadMenu(IDR_NOTIMENU);
 						 CMenu cMenu = menu.GetSubMenu(0);
 						 cMenu.CheckMenuItem(ID_NOTI_ENLAN, m_btnEnableLan.GetCheck() ? MF_CHECKED : MF_UNCHECKED);
+						 cMenu.CheckMenuItem(ID_NOTI_ENREDI, m_btnEnableRedi.GetCheck() ? MF_CHECKED : MF_UNCHECKED);
 						 cMenu.CheckMenuItem(ID_NOTI_ENCAMPUS, m_btnEnableCampus.GetCheck() ? MF_CHECKED : MF_UNCHECKED);
 						 cMenu.TrackPopupMenu(TPM_LEFTALIGN, point.x, point.y, m_hWnd);
 						 HMENU hmenu = cMenu.Detach();

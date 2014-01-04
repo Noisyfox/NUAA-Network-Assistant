@@ -102,8 +102,7 @@ ULONG NAT::Setup(NetInfo adapter)
 	netInfo = adapter;
 
 	//Create thread
-	//std::thread && a = std::thread(NATThread, *this);
-	m_service_thread = new std::thread(NATThread, *this);
+	m_service_thread = new std::thread(NATThread, this);
 
 	return NO_ERROR;
 }
@@ -147,16 +146,16 @@ void FillCheckSum(u_char * data, bpf_u_int32 len, bpf_u_int32 pos)
 	data[pos + 1] = (sum & 0xff);
 }
 
-void broadcast(NAT& nat, pcap_t * fp, bpf_u_int32 len, const u_char * data)
+void broadcast(NAT* nat, pcap_t * fp, bpf_u_int32 len, const u_char * data)
 {
 	u_char * d = (u_char*)malloc(len);
 	memcpy(d, data, len);
-	memcpy(d, nat.netInfo.gatewayMac, 6);
+	memcpy(d, nat->netInfo.gatewayMac, 6);
 
 	DWORD num_ip = 1;
-	DWORD mask_t = SwapEndian(nat.netInfo.localMask);
+	DWORD mask_t = SwapEndian(nat->netInfo.localMask);
 	UINT8 mask_length;
-	ConvertIpv4MaskToLength(nat.netInfo.localMask, &mask_length);
+	ConvertIpv4MaskToLength(nat->netInfo.localMask, &mask_length);
 	mask_length = 32 - mask_length;
 	if (mask_length > 10)
 	{
@@ -165,12 +164,12 @@ void broadcast(NAT& nat, pcap_t * fp, bpf_u_int32 len, const u_char * data)
 	}
 	for (int i = 0; i < mask_length; i++)
 		num_ip <<= 1;
-	DWORD local_ip = SwapEndian(nat.netInfo.localIp);
-	DWORD ip_start = (SwapEndian(nat.netInfo.localIp) & SwapEndian(nat.netInfo.localMask)) + 1;
-	DWORD ip_end = (SwapEndian(nat.netInfo.localIp) & SwapEndian(nat.netInfo.localMask)) + num_ip - 1;
+	DWORD local_ip = SwapEndian(nat->netInfo.localIp);
+	DWORD ip_start = (SwapEndian(nat->netInfo.localIp) & SwapEndian(nat->netInfo.localMask)) + 1;
+	DWORD ip_end = (SwapEndian(nat->netInfo.localIp) & SwapEndian(nat->netInfo.localMask)) + num_ip - 1;
 	for (DWORD ip = ip_start; ip < ip_end; ip++)
 	{
-		if (SwapEndian(ip) == nat.netInfo.localIp)
+		if (SwapEndian(ip) == nat->netInfo.localIp)
 			continue;
 		d[26] = (local_ip >> 24) & 0xff;
 		d[27] = (local_ip >> 16) & 0xff;
@@ -181,40 +180,50 @@ void broadcast(NAT& nat, pcap_t * fp, bpf_u_int32 len, const u_char * data)
 		d[32] = (ip >> 8) & 0xff;
 		d[33] = ip & 0xff;
 		FillCheckSum(d + 14, 20, 10);
-		// FillCheckSum(d + 14, len - 14, 26);
+		//FillCheckSum(d + 14, len - 14, 26);
 		d[40] = 0;
 		d[41] = 0;
 		if (pcap_sendpacket(fp, d, len) != 0)
 		{
-			fprintf(stderr, "\nError sending the packet: %s\n", pcap_geterr(fp));
+			//fprintf(stderr, "\nError sending the packet: %s\n", pcap_geterr(fp));
 		}
 	}
 
 	free(d);
 }
 
-void NATThread(NAT& nat)
+void NATThread(NAT* nat)
 {
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
 
 	while (1)
 	{
-		nat.m_service_mutex->lock();
+		nat->m_service_mutex->lock();
 
-		if (nat.m_devcount <= 0){
-			nat.m_service_mutex->unlock();
+		if (nat->m_devcount <= 0){
+			nat->m_service_mutex->unlock();
 			return;
 		}
 
-		for (int i = 0; i < nat.m_devcount; i++){
-			int res = pcap_next_ex(nat.m_opened_dev[i], &header, &pkt_data);
-			if (res > 0){
+		for (int i = 0; i < nat->m_devcount; i++){
+			int res = pcap_next_ex(nat->m_opened_dev[i], &header, &pkt_data);
+				if (res > 0){
+					//struct tm ltime;
+					//char timestr[16];
+					//time_t local_tv_sec;
 
-			}
+					///* convert the timestamp to readable format */
+					//local_tv_sec = header->ts.tv_sec;
+					//localtime_s(&ltime, &local_tv_sec);
+					//strftime(timestr, sizeof timestr, "%H:%M:%S", &ltime);
+
+					//printf("%s,%.6d len:%d\n", timestr, header->ts.tv_usec, header->len);
+					broadcast(nat, nat->m_opened_dev[nat->m_target], header->len, pkt_data);
+				}
 		}
 
-		nat.m_service_mutex->unlock();
+		nat->m_service_mutex->unlock();
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }

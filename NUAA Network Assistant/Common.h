@@ -22,3 +22,4 @@ extern NetDetector _NetDetector;
 extern NetInfo _NetInfo;
 extern ArpHacker _ArpHacker;
 extern RouteHacker _RouteHacker;
+extern NAT _NAT;
