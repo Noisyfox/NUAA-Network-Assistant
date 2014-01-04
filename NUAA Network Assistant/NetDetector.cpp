@@ -58,6 +58,10 @@ BOOL NetDetector::ListAllAdapter(PIP_ADAPTER_INFO & adapterInfo, BOOL forceResca
 
 BOOL NetDetector::AutoSetAdapter()
 {
+	DWORD mask, gateway;
+	gateway = inet_addr("172.19.0.0");
+	mask = inet_addr("255.255.0.0");
+
 	PIP_ADAPTER_INFO pAdapter;
 	if (!ListAllAdapter(pAdapter, FALSE)){
 		return FALSE;
@@ -69,9 +73,7 @@ BOOL NetDetector::AutoSetAdapter()
 		IPAddr ip = inet_addr(pAdapter->GatewayList.IpAddress.String);
 		BYTE * addr = (BYTE*)&ip;
 
-		// 有线网络判断，由于校内网的开头都是172，就用这个判断了
-
-		if (addr[0] == 172)
+		if ((ip & mask) == (gateway & mask))
 		{
 			// 保存信息
 			return SetAdapter(pAdapter);
