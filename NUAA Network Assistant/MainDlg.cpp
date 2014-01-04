@@ -106,9 +106,14 @@ LRESULT CMainDlg::OnChangeAdapter(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 		ShowNetInfo(&_NetInfo);
 
 		m_btnEnableLan.SetCheck(FALSE);
+		m_btnEnableRedi.SetCheck(FALSE);
 		m_btnEnableCampus.SetCheck(FALSE);
 		if (_ArpHacker.IsArpHacked())_ArpHacker.FlushArp();
 		if (_RouteHacker.IsRouteHacked())_RouteHacker.FlushRoute();
+
+		_NAT.Uninstall();
+
+		_TianyiDial.RegisterMessage(this->m_hWnd);
 	}
 
 	return 0;
