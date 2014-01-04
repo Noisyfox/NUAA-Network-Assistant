@@ -13,6 +13,25 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
+// 非特定语言(默认值) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+#pragma code_page(936)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\NUAA Network Assistant.ico"
+#endif    // 非特定语言(默认值) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
 // 中文(简体，中国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
@@ -46,6 +65,49 @@ BEGIN
     LTEXT           "00-00-00-00-00-00",IDC_NETINFO_GATEWAYMAC,73,99,70,8
 END
 
+IDD_MAINDLG DIALOGEX 0, 0, 349, 168
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
+CAPTION "南航网络助手"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    PUSHBUTTON      "关于",ID_APP_ABOUT,292,147,50,14
+    GROUPBOX        "当前适配器",IDC_STATIC,172,7,170,92
+    LTEXT           "适配器名称:",IDC_STATIC,178,20,44,8
+    LTEXT           "本机 ip:",IDC_STATIC,178,32,27,8
+    LTEXT           "子网掩码:",IDC_STATIC,178,44,36,8
+    LTEXT           "默认网关:",IDC_STATIC,178,56,36,8
+    LTEXT           "网关 mac:",IDC_STATIC,178,68,34,8
+    LTEXT           "",IDC_NETINFO_ADAPNAME,239,20,95,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_LOCIP,239,33,95,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_LOCMASK,239,44,95,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_GATEWAYIP,239,56,95,8
+    LTEXT           "00-00-00-00-00-00",IDC_NETINFO_GATEWAYMAC,239,68,95,8
+    PUSHBUTTON      "更改",IDC_CHANGEADAP,289,82,50,14
+    GROUPBOX        "网络工具",IDC_STATIC,7,7,165,154
+    CONTROL         "启用局域网直连",IDC_CHECK_ENABLELAN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,20,72,10
+    CONTROL         "启用广播重定向",IDC_CHECK_ENABLEREDI,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,35,72,10
+    CONTROL         "连接外网时启用校园网访问",IDC_CHECK_ENABLECAMPUS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,50,112,10
+    GROUPBOX        "天翼拨号器",IDC_STATIC,14,65,152,89
+    LTEXT           "账户:",IDC_STATIC,20,79,20,8
+    EDITTEXT        IDC_DIAL_ACCOUNT,59,76,101,14,ES_AUTOHSCROLL
+    LTEXT           "密码:",IDC_STATIC,20,99,20,8
+    EDITTEXT        IDC_DIAL_PASSWD,59,96,102,14,ES_PASSWORD | ES_AUTOHSCROLL
+    PUSHBUTTON      "连接",IDC_DIAL,111,134,50,14
+    LTEXT           "未连接.",IDC_DIAL_STATUS,20,116,89,31,WS_DISABLED
+END
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 177, 109
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,120,88,50,14
+    CTEXT           "NUAA Network Assistant v1.0\n\n(c) Copyright 2014",IDC_STATIC,4,57,78,32
+    ICON            IDR_MAINFRAME,IDC_STATIC,34,26,20,20
+    GROUPBOX        "",IDC_STATIC,7,7,72,95
+    LTEXT           "By Noisyfox at NUAA\n\n感谢\n\nYeahO_O Yuan\nlquterqtd\n\n的大力帮助。",IDC_STATIC,85,15,85,68
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -61,6 +123,22 @@ BEGIN
         RIGHTMARGIN, 220
         TOPMARGIN, 7
         BOTTOMMARGIN, 135
+    END
+
+    IDD_MAINDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 342
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 161
+    END
+
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 170
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 102
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -81,6 +159,140 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "关闭",                          IDCANCEL
     END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "CompanyName", "Noisyfox"
+            VALUE "FileDescription", "南航网络助手"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "NUAA Network Assistant"
+            VALUE "LegalCopyright", "Copyright 2014 Noisyfox"
+            VALUE "OriginalFilename", "NUAA Network Assistant.exe"
+            VALUE "ProductName", "南航网络助手"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "南航网络助手"
+    IDS_EXIT_CONFIRM        "你确定要退出吗?"
+    IDS_TAG_SEMA            "NUAA_NetAssistant"
+    IDS_ERR_CREATESEMA      "创建信标失败"
+    IDS_ERR_SEMANOTFOUND    "无法找到窗口"
+    IDS_BTN_DIAL_CONNECT    "连接"
+    IDS_BTN_DIAL_DISCONNECT "断开"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
+    ID_FILE_PRINT           "Print the active document\nPrint"
+    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_SCSIZE          "Change the window size"
+    ATL_IDS_SCMOVE          "Change the window position"
+    ATL_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    ATL_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    ATL_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    ATL_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    ATL_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_SCRESTORE       "Restore the window to normal size"
+    ATL_IDS_SCTASKLIST      "Activate Task List"
+    ATL_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE
+BEGIN
+    ATL_IDS_MRU_FILE        "Open this document"
 END
 
 #endif    // 中文(简体，中国) resources
@@ -111,12 +323,34 @@ BEGIN
     LTEXT           "By Noisyfox at NUAA\n\nGreat thanks to\n\nYeahO_O Yuan\nlquterqtd\n\nfor their awsome work.",IDC_STATIC,85,15,85,63
 END
 
-IDD_MAINDLG DIALOGEX 0, 0, 349, 184
+IDD_SELECTADAPTER DIALOGEX 0, 0, 227, 142
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Select Adapter"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_ADAPTERLIST,14,23,200,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,97,121,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,170,121,50,14
+    LTEXT           "All adapters:",IDC_STATIC,14,11,42,8
+    GROUPBOX        "Static",IDC_GROUP_NETINFO,14,40,200,75
+    LTEXT           "mac address:",IDC_STATIC,21,55,58,8
+    LTEXT           "ip address:",IDC_STATIC,21,66,58,8
+    LTEXT           "subnet mask:",IDC_STATIC,21,77,58,8
+    LTEXT           "default gateway:",IDC_STATIC,21,88,58,8
+    LTEXT           "gateway mac:",IDC_STATIC,21,99,58,8
+    LTEXT           "00-00-00-00-00-00",IDC_NETINFO_LOCMAC,93,55,70,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_LOCIP,93,66,70,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_LOCMASK,93,77,70,8
+    LTEXT           "0.0.0.0",IDC_NETINFO_GATEWAYIP,93,88,70,8
+    LTEXT           "00-00-00-00-00-00",IDC_NETINFO_GATEWAYMAC,93,99,70,8
+END
+
+IDD_MAINDLG DIALOGEX 0, 0, 349, 167
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
 CAPTION "NUAA Network Assistant"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    PUSHBUTTON      "&About",ID_APP_ABOUT,292,163,50,14
+    PUSHBUTTON      "&About",ID_APP_ABOUT,292,146,50,14
     GROUPBOX        "Current Adapter",IDC_STATIC,172,7,170,92
     LTEXT           "Adapter Name:",IDC_STATIC,178,20,50,8
     LTEXT           "Local Ip:",IDC_STATIC,178,32,28,8
@@ -129,21 +363,20 @@ BEGIN
     LTEXT           "0.0.0.0",IDC_NETINFO_GATEWAYIP,239,56,95,8
     LTEXT           "00-00-00-00-00-00",IDC_NETINFO_GATEWAYMAC,239,68,95,8
     PUSHBUTTON      "Change",IDC_CHANGEADAP,289,82,50,14
-    GROUPBOX        "Network Tools",IDC_STATIC,7,7,165,170
+    GROUPBOX        "Network Tools",IDC_STATIC,7,7,165,153
     CONTROL         "Enable direct LAN connection",IDC_CHECK_ENABLELAN,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,20,109,10
     CONTROL         "Enable broadcast redirection",IDC_CHECK_ENABLEREDI,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,35,107,10
     CONTROL         "Enable campus network with outer net",IDC_CHECK_ENABLECAMPUS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,50,139,10
-    CONTROL         "Enable wifi share with Tianyi campus",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,15,65,132,10
-    GROUPBOX        "Tianyi Dialer",IDC_STATIC,14,80,152,89
-    LTEXT           "Account:",IDC_STATIC,20,94,30,8
-    EDITTEXT        IDC_DIAL_ACCOUNT,59,91,101,14,ES_AUTOHSCROLL
-    LTEXT           "Password:",IDC_STATIC,20,114,34,8
-    EDITTEXT        IDC_DIAL_PASSWD,59,111,102,14,ES_PASSWORD | ES_AUTOHSCROLL
-    PUSHBUTTON      "Connect",IDC_DIAL,111,149,50,14
-    LTEXT           "Not connected.",IDC_DIAL_STATUS,20,131,89,31,WS_DISABLED
+    GROUPBOX        "Tianyi Dialer",IDC_STATIC,14,65,152,89
+    LTEXT           "Account:",IDC_STATIC,20,79,30,8
+    EDITTEXT        IDC_DIAL_ACCOUNT,59,76,101,14,ES_AUTOHSCROLL
+    LTEXT           "Password:",IDC_STATIC,20,99,34,8
+    EDITTEXT        IDC_DIAL_PASSWD,59,96,102,14,ES_PASSWORD | ES_AUTOHSCROLL
+    PUSHBUTTON      "Connect",IDC_DIAL,111,134,50,14
+    LTEXT           "Not connected.",IDC_DIAL_STATUS,20,116,89,31,WS_DISABLED
 END
 
 
@@ -163,15 +396,41 @@ BEGIN
         BOTTOMMARGIN, 102
     END
 
+    IDD_SELECTADAPTER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 220
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 135
+    END
+
     IDD_MAINDLG, DIALOG
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 342
         TOPMARGIN, 7
-        BOTTOMMARGIN, 177
+        BOTTOMMARGIN, 160
     END
 END
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_NOTIMENU MENU
+BEGIN
+    POPUP "Noti"
+    BEGIN
+        MENUITEM "Direct LAN connection",       ID_NOTI_ENLAN
+        MENUITEM "Broadcast redirection",       ID_NOTI_ENREDI
+        MENUITEM "Campus net with outer net",   ID_NOTI_ENCAMPUS
+        MENUITEM SEPARATOR
+        MENUITEM "Quit",                        IDCANCEL
+    END
+END
 
 
 #ifdef APSTUDIO_INVOKED
@@ -198,15 +457,6 @@ END
 
 #endif    // APSTUDIO_INVOKED
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\NUAA Network Assistant.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -252,14 +502,15 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040904B0"
+        BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "NUAA Network Assistant Module"
+            VALUE "CompanyName", "Noisyfox"
+            VALUE "FileDescription", "NUAA Network Assistant"
             VALUE "FileVersion", "1, 0, 0, 1"
             VALUE "InternalName", "NUAA Network Assistant"
-            VALUE "LegalCopyright", "Copyright 2014"
+            VALUE "LegalCopyright", "Copyright 2014 Noisyfox"
             VALUE "OriginalFilename", "NUAA Network Assistant.exe"
-            VALUE "ProductName", "NUAA Network Assistant Module"
+            VALUE "ProductName", "NUAA Network Assistant"
             VALUE "ProductVersion", "1, 0, 0, 1"
         END
     END

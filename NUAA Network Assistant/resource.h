@@ -12,6 +12,8 @@
 #define IDS_BTN_DIAL_CONNECT            133
 #define IDS_BTN_DIAL_DISCONNECT         134
 #define IDD_SELECTADAPTER               201
+#define IDD_SELECTADAPTER1              202
+#define IDD_ABOUTBOX1                   202
 #define IDR_NOTIMENU                    204
 #define IDC_COMBO1                      1001
 #define IDC_ADAPTERLIST                 1001
@@ -51,7 +53,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        205
+#define _APS_NEXT_RESOURCE_VALUE        206
 #define _APS_NEXT_COMMAND_VALUE         32786
 #define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           101
