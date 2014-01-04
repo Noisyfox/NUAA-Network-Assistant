@@ -119,6 +119,7 @@
     <ClCompile Include="AdapterSelectDlg.cpp" />
     <ClCompile Include="ArpHacker.cpp" />
     <ClCompile Include="MainDlg.cpp" />
+    <ClCompile Include="md5.cpp" />
     <ClCompile Include="NAT.cpp" />
     <ClCompile Include="NetDetector.cpp" />
     <ClCompile Include="NUAA Network Assistant.cpp" />
@@ -135,11 +136,13 @@
     <ClInclude Include="ArpHacker.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="MainDlg.h" />
+    <ClInclude Include="md5.h" />
     <ClInclude Include="NAT.h" />
     <ClInclude Include="NetDetector.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="RouteHacker.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TyDial.hpp" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="VISTA.h" />
   </ItemGroup>
