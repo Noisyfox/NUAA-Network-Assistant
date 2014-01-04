@@ -111,12 +111,12 @@ BEGIN
     LTEXT           "By Noisyfox at NUAA\n\nGreat thanks to\n\nYeahO_O Yuan\nlquterqtd\n\nfor their awsome work.",IDC_STATIC,85,15,85,63
 END
 
-IDD_MAINDLG DIALOGEX 0, 0, 349, 166
+IDD_MAINDLG DIALOGEX 0, 0, 349, 184
 STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_CAPTION | WS_SYSMENU
 CAPTION "NUAA Network Assistant"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    PUSHBUTTON      "&About",ID_APP_ABOUT,292,145,50,14
+    PUSHBUTTON      "&About",ID_APP_ABOUT,292,163,50,14
     GROUPBOX        "Current Adapter",IDC_STATIC,172,7,170,92
     LTEXT           "Adapter Name:",IDC_STATIC,178,20,50,8
     LTEXT           "Local Ip:",IDC_STATIC,178,32,28,8
@@ -129,7 +129,7 @@ BEGIN
     LTEXT           "0.0.0.0",IDC_NETINFO_GATEWAYIP,239,56,95,8
     LTEXT           "00-00-00-00-00-00",IDC_NETINFO_GATEWAYMAC,239,68,95,8
     PUSHBUTTON      "Change",IDC_CHANGEADAP,289,82,50,14
-    GROUPBOX        "Network Tools",IDC_STATIC,7,7,165,152
+    GROUPBOX        "Network Tools",IDC_STATIC,7,7,165,170
     CONTROL         "Enable direct LAN connection",IDC_CHECK_ENABLELAN,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,20,109,10
     CONTROL         "Enable broadcast redirection",IDC_CHECK_ENABLEREDI,
@@ -137,13 +137,13 @@ BEGIN
     CONTROL         "Enable campus network with outer net",IDC_CHECK_ENABLECAMPUS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,50,139,10
     CONTROL         "Enable wifi share with Tianyi campus",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,15,65,132,10
-    GROUPBOX        "Tianyi Dialer",IDC_STATIC,14,80,152,73
+    GROUPBOX        "Tianyi Dialer",IDC_STATIC,14,80,152,89
     LTEXT           "Account:",IDC_STATIC,20,94,30,8
     EDITTEXT        IDC_DIAL_ACCOUNT,59,91,101,14,ES_AUTOHSCROLL
     LTEXT           "Password:",IDC_STATIC,20,114,34,8
     EDITTEXT        IDC_DIAL_PASSWD,59,111,102,14,ES_PASSWORD | ES_AUTOHSCROLL
-    PUSHBUTTON      "Connect",IDC_DIAL,111,132,50,14
-    LTEXT           "Not connected.",IDC_DIAL_STATUS,20,135,85,8,WS_DISABLED
+    PUSHBUTTON      "Connect",IDC_DIAL,111,149,50,14
+    LTEXT           "Not connected.",IDC_DIAL_STATUS,20,131,89,31,WS_DISABLED
 END
 
 
@@ -168,7 +168,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 342
         TOPMARGIN, 7
-        BOTTOMMARGIN, 159
+        BOTTOMMARGIN, 177
     END
 END
 #endif    // APSTUDIO_INVOKED

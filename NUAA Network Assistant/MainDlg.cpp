@@ -7,6 +7,7 @@
 
 #include "MainDlg.h"
 #include "AdapterSelectDlg.h"
+#include "Util.h"
 
 CMainDlg::CMainDlg()
 {
@@ -326,7 +327,7 @@ LRESULT CMainDlg::OnDial(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bH
 
 	if (dwError != 0)
 	{
-		str.Format(_T("´íÎó´úÂë: %d"), dwError);
+		str = DialGetError(dwError);
 	}
 
 	SetDlgItemText(IDC_DIAL_STATUS, str);
