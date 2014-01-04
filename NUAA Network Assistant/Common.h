@@ -13,6 +13,7 @@
 #include "ArpHacker.h"
 #include "RouteHacker.h"
 #include "NAT.h"
+#include "TianyiDial.h"
 
 #pragma comment(lib, "IPHLPAPI.lib")
 #pragma comment(lib, "ws2_32.lib")
@@ -23,3 +24,4 @@ extern NetInfo _NetInfo;
 extern ArpHacker _ArpHacker;
 extern RouteHacker _RouteHacker;
 extern NAT _NAT;
+extern TianyiDial _TianyiDial;

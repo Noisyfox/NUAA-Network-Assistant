@@ -28,6 +28,7 @@ public:
 
 	~TyDial()
 	{
+		Cancel();
 		Clean();
 	}
 

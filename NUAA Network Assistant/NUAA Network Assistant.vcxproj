@@ -128,6 +128,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="TianyiDial.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="VISTA.cpp" />
   </ItemGroup>
@@ -142,6 +143,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="RouteHacker.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TianyiDial.h" />
     <ClInclude Include="TyDial.hpp" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="VISTA.h" />

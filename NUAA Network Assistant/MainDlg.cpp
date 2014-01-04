@@ -11,6 +11,9 @@
 CMainDlg::CMainDlg()
 {
 	m_appName.LoadString(IDR_MAINFRAME);
+	m_strDialConnect.LoadString(IDS_BTN_DIAL_CONNECT);
+	m_strDialDisconnect.LoadString(IDS_BTN_DIAL_DISCONNECT);
+
 	hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON));
 	hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON));
 	m_msgTaskbarRestart = RegisterWindowMessage(_T("TaskbarCreated"));
@@ -37,6 +40,10 @@ BOOL CMainDlg::DeleteNotificationIcon()
 
 LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
+	CString SemaTag;
+	SemaTag.LoadString(IDS_TAG_SEMA);
+	::SetProp(m_hWnd, SemaTag, (HANDLE)1);
+
 	// center the dialog on the screen
 	CenterWindow();
 
@@ -47,6 +54,10 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	m_btnEnableLan = GetDlgItem(IDC_CHECK_ENABLELAN);
 	m_btnEnableRedi = GetDlgItem(IDC_CHECK_ENABLEREDI);
 	m_btnEnableCampus = GetDlgItem(IDC_CHECK_ENABLECAMPUS);
+	m_btnDial = GetDlgItem(IDC_DIAL);
+
+	m_edtDialAccount = GetDlgItem(IDC_DIAL_ACCOUNT);
+	m_edtDialPasswd = GetDlgItem(IDC_DIAL_PASSWD);
 
 	CreateNotificationIcon();
 
@@ -56,6 +67,8 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	m_btnEnableCampus.SetCheck(TRUE);
 	SendMessage(WM_COMMAND, IDC_CHECK_ENABLELAN, NULL);
 	SendMessage(WM_COMMAND, IDC_CHECK_ENABLECAMPUS, NULL);
+
+	_TianyiDial.RegisterMessage(this->m_hWnd);
 
 	return TRUE;
 }
@@ -98,6 +111,29 @@ LRESULT CMainDlg::OnChangeAdapter(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 		if (_RouteHacker.IsRouteHacked())_RouteHacker.FlushRoute();
 	}
 
+	return 0;
+}
+
+LRESULT CMainDlg::OnDial(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	CString account, passwd;
+	m_edtDialAccount.GetWindowText(account);
+	m_edtDialPasswd.GetWindowText(passwd);
+
+	//SetDlgItemText(IDC_DIAL_STATUS, account);
+
+	if (_TianyiDial.IsConnected()){
+		m_btnDial.EnableWindow(FALSE);
+		_TianyiDial.Disconnect();
+	}
+	else {
+		if (_TianyiDial.Dial(_NetInfo, account, passwd))
+		{
+			m_edtDialAccount.SetReadOnly(TRUE);
+			m_edtDialPasswd.SetReadOnly(TRUE);
+		}
+	}
+	
 	return 0;
 }
 
@@ -186,6 +222,10 @@ LRESULT CMainDlg::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/,
 {
 	DeleteNotificationIcon();
 
+	CString SemaTag;
+	SemaTag.LoadString(IDS_TAG_SEMA);
+	::RemoveProp(m_hWnd, SemaTag);
+
 	return 0;
 }
 
@@ -232,6 +272,71 @@ LRESULT CMainDlg::OnTaskbarRestart(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lP
 {
 	DeleteNotificationIcon();
 	CreateNotificationIcon();
+
+	return 0;
+}
+
+LRESULT CMainDlg::OnDial(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+{
+	RASCONNSTATE rasconnstat = (RASCONNSTATE)wParam;
+	DWORD dwError = (DWORD)lParam;
+
+	_TianyiDial.OnCallback(rasconnstat, dwError);
+
+	CString str;
+
+	switch (rasconnstat)
+	{
+	case RASCS_OpenPort: str = _T("正在打开端口..."); break;
+	case RASCS_PortOpened: str = _T("端口已经打开"); break;
+	case RASCS_ConnectDevice: str = _T("正在连接设备..."); break;
+	case RASCS_DeviceConnected: str = _T("设备已经连接"); break;
+	case RASCS_AllDevicesConnected: str = _T("所有设备已经连接"); break;
+	case RASCS_Authenticate: str = _T("正在验证..."); break;
+	case RASCS_AuthNotify: str = _T("开始验证..."); break;
+	case RASCS_AuthRetry: str = _T("重新验证..."); break;
+	case RASCS_AuthCallback: str = _T("验证回拨..."); break;
+	case RASCS_AuthChangePassword: str = _T("请求修改密码..."); break;
+	case RASCS_AuthProject: str = _T("AuthProject"); break;
+	case RASCS_AuthLinkSpeed: str = _T("正在计算连接速率..."); break;
+	case RASCS_AuthAck: str = _T("验证通过..."); break;
+	case RASCS_ReAuthenticate: str = _T("正在重新验证..."); break;
+	case RASCS_Authenticated: str = _T("验证完成..."); break;
+	case RASCS_PrepareForCallback: str = _T("准备回拨..."); break;
+	case RASCS_WaitForModemReset: str = _T("等待重置..."); break;
+	case RASCS_WaitForCallback: str = _T("等待回拨..."); break;
+	case RASCS_Projected: str = _T("Projected"); break;
+	case RASCS_SubEntryConnected: str = _T("子入口点已连接"); break;
+	case RASCS_SubEntryDisconnected: str = _T("子入口点已断开"); break;
+		//case RASCS_ApplySettings: str = _T("正在应用设置..."); break;
+	case RASCS_Interactive: str = _T("正在交互..."); break;
+	case RASCS_RetryAuthentication: str = _T("正在重试..."); break;
+	case RASCS_CallbackSetByCaller: str = _T("CallbackSetByCaller"); break;
+	case RASCS_PasswordExpired: str = _T("密码已过期"); break;
+	case RASCS_InvokeEapUI: str = _T("InvokeEapUI"); break;
+	case RASCS_Connected: str = _T("已经连接"); break;
+	case RASCS_Disconnected: str = _T("已经断开"); break;
+	default: str.Format(_T("状态码：%d"), rasconnstat); break;
+	}
+
+	if (dwError != 0)
+	{
+		str.Format(_T("错误代码: %d"), dwError);
+	}
+
+	SetDlgItemText(IDC_DIAL_STATUS, str);
+
+	m_btnDial.SetWindowText(m_strDialDisconnect);
+
+	if (dwError != 0 || rasconnstat == RASCS_Disconnected){
+		m_btnDial.EnableWindow(TRUE);
+		m_edtDialAccount.SetReadOnly(FALSE);
+		m_edtDialPasswd.SetReadOnly(FALSE);
+		m_btnDial.SetWindowText(m_strDialConnect);
+	}
+	else if (rasconnstat == RASCS_Connected){
+		m_btnDial.EnableWindow(TRUE);
+	}
 
 	return 0;
 }

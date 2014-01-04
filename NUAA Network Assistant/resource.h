@@ -6,6 +6,11 @@
 #define IDR_MAINFRAME                   128
 #define IDD_MAINDLG                     129
 #define IDS_EXIT_CONFIRM                129
+#define IDS_TAG_SEMA                    130
+#define IDS_ERR_CREATESEMA              131
+#define IDS_ERR_SEMANOTFOUND            132
+#define IDS_BTN_DIAL_CONNECT            133
+#define IDS_BTN_DIAL_DISCONNECT         134
 #define IDD_SELECTADAPTER               201
 #define IDR_NOTIMENU                    204
 #define IDC_COMBO1                      1001
@@ -23,10 +28,14 @@
 #define IDC_CHECK_ENABLECAMPUS          1015
 #define IDC_CHECK3                      1016
 #define IDC_EDIT1                       1017
+#define IDC_DIAL_ACCOUNT                1017
 #define IDC_EDIT2                       1018
+#define IDC_DIAL_PASSWD                 1018
 #define IDC_BUTTON1                     1019
+#define IDC_DIAL                        1019
 #define IDC_CHECK_ENABLELAN2            1020
 #define IDC_CHECK_ENABLEREDI            1020
+#define IDC_DIAL_STATUS                 1021
 #define ID_NOTI_EXIT                    32776
 #define IDC                             32777
 #define ID_NOTI_1                       32778
@@ -44,7 +53,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        205
 #define _APS_NEXT_COMMAND_VALUE         32786
-#define _APS_NEXT_CONTROL_VALUE         1020
+#define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
