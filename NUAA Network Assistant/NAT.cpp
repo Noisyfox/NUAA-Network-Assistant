@@ -2,17 +2,13 @@
 #include "NAT.h"
 
 NAT::NAT():
-m_devcount(0), m_service_mutex(new std::mutex()),
-m_target(-1)
+m_devcount(0),m_target(-1)
 {
 }
 
 NAT::~NAT()
 {
 	Uninstall();
-
-	delete m_service_mutex;
-	m_service_mutex = NULL;
 }
 
 ULONG NAT::Setup(NetInfo adapter)
@@ -111,7 +107,7 @@ BOOL NAT::Uninstall()
 {
 	if (m_devcount <= 0)return FALSE;
 
-	m_service_mutex->lock();
+	m_service_mutex.lock();
 
 	for (int i = 0; i < m_devcount; i++){
 		pcap_close(m_opened_dev[i]);
@@ -119,7 +115,7 @@ BOOL NAT::Uninstall()
 	m_devcount = 0;
 	m_target = -1;
 
-	m_service_mutex->unlock();
+	m_service_mutex.unlock();
 
 	m_service_thread->join();
 
@@ -200,10 +196,10 @@ void NATThread(NAT* nat)
 
 	while (1)
 	{
-		nat->m_service_mutex->lock();
+		nat->m_service_mutex.lock();
 
 		if (nat->m_devcount <= 0){
-			nat->m_service_mutex->unlock();
+			nat->m_service_mutex.unlock();
 			return;
 		}
 
@@ -224,7 +220,7 @@ void NATThread(NAT* nat)
 				}
 		}
 
-		nat->m_service_mutex->unlock();
+		nat->m_service_mutex.unlock();
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 }

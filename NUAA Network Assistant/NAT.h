@@ -14,7 +14,7 @@ private:
 	pcap_t * m_opened_dev[100];
 	int m_target;
 	std::thread * m_service_thread;
-	std::mutex * m_service_mutex;
+	std::mutex m_service_mutex;
 	NetInfo netInfo;
 
 	friend void NATThread(NAT* nat);
