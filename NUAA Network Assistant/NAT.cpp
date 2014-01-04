@@ -151,6 +151,7 @@ void broadcast(NAT* nat, pcap_t * fp, bpf_u_int32 len, const u_char * data)
 	u_char * d = (u_char*)malloc(len);
 	memcpy(d, data, len);
 	memcpy(d, nat->netInfo.gatewayMac, 6);
+	memcpy(d + 6, nat->netInfo.localMac, 6);
 
 	DWORD num_ip = 1;
 	DWORD mask_t = SwapEndian(nat->netInfo.localMask);
