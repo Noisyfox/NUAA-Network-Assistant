@@ -9,6 +9,7 @@
 #include "AdapterSelectDlg.h"
 
 CAppModule _Module;
+Config _Config;
 NetDetector _NetDetector;
 NetInfo _NetInfo;
 ArpHacker _ArpHacker;
@@ -63,6 +64,18 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
 			msg.LoadString(IDS_ERR_CREATESEMA);
 			MessageBox(NULL, msg, NULL, MB_ICONSTOP);
 			return FALSE;
+		}
+
+		//º”‘ÿ≈‰÷√
+		{
+			TCHAR tp[MAX_PATH] = _T("");
+			TCHAR config_path[MAX_PATH];
+			config_path[0] = '\x0';
+			GetModuleFileName(NULL, tp, MAX_PATH);
+			PathRemoveFileSpec(tp);
+			PathCombine(config_path, tp, _T("config.ini"));
+			_Config.SetFile(CString(config_path));
+			_Config.Load();
 		}
 
 		if (!_NetDetector.AutoSetAdapter() || !_NetDetector.ObtainInformation(_NetInfo)){

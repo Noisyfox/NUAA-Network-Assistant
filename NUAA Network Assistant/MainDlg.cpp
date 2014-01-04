@@ -71,6 +71,10 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 
 	_TianyiDial.RegisterMessage(this->m_hWnd);
 
+	//º”‘ÿ≈‰÷√
+	m_edtDialAccount.SetWindowText(_Config.cfg_tAccount);
+	m_edtDialPasswd.SetWindowText(_Config.cfg_tPasswd);
+
 	return TRUE;
 }
 
@@ -125,6 +129,10 @@ LRESULT CMainDlg::OnDial(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL&
 	CString account, passwd;
 	m_edtDialAccount.GetWindowText(account);
 	m_edtDialPasswd.GetWindowText(passwd);
+
+	_Config.cfg_tAccount = account;
+	_Config.cfg_tPasswd = passwd;
+	_Config.Save();
 
 	//SetDlgItemText(IDC_DIAL_STATUS, account);
 

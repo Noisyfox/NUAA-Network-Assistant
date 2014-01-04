@@ -14,11 +14,13 @@
 #include "RouteHacker.h"
 #include "NAT.h"
 #include "TianyiDial.h"
+#include "Config.h"
 
 #pragma comment(lib, "IPHLPAPI.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "wpcap.lib")
 
+extern Config _Config;
 extern NetDetector _NetDetector;
 extern NetInfo _NetInfo;
 extern ArpHacker _ArpHacker;

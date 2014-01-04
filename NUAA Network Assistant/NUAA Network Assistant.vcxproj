@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="AdapterSelectDlg.cpp" />
     <ClCompile Include="ArpHacker.cpp" />
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="md5.cpp" />
     <ClCompile Include="NAT.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="AdapterSelectDlg.h" />
     <ClInclude Include="ArpHacker.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="md5.h" />
     <ClInclude Include="NAT.h" />
