@@ -38,7 +38,8 @@ DWORD GetMetric(NetInfo adapter)
 DWORD CampusNetCount = 2;
 CString CampusNet[][2] ={ 
 	{ _T("211.65.96.0"), _T("255.255.240.0") },
-	{ _T("202.119.64.0"), _T("255.255.240.0") } 
+	{ _T("202.119.64.0"), _T("255.255.240.0") },
+	{ _T("222.192.64.0"), _T("255.255.192.0") }
 };
 
 RouteHacker::RouteHacker():
