@@ -102,7 +102,7 @@ CAPTION "关于"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,120,88,50,14
-    CTEXT           "NUAA Network Assistant v1.0\n\n(c) Copyright 2014",IDC_STATIC,4,57,78,32
+    CTEXT           "NUAA Network Assistant v1.1\n\n(c) Copyright 2014",IDC_STATIC,4,57,78,32
     ICON            IDR_MAINFRAME,IDC_STATIC,34,26,20,20
     GROUPBOX        "",IDC_STATIC,7,7,72,95
     LTEXT           "By Noisyfox at NUAA\n\n感谢\n\nYeahO_O Yuan\nlquterqtd\n\n的大力帮助。",IDC_STATIC,85,15,85,68
@@ -168,8 +168,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,1,0,1
+ PRODUCTVERSION 1,1,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -186,12 +186,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Noisyfox"
             VALUE "FileDescription", "南航网络助手"
-            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "FileVersion", "1.1.0.1"
             VALUE "InternalName", "NUAA Network Assistant"
             VALUE "LegalCopyright", "Copyright 2014 Noisyfox"
             VALUE "OriginalFilename", "NUAA Network Assistant.exe"
             VALUE "ProductName", "南航网络助手"
-            VALUE "ProductVersion", "1, 0, 0, 1"
+            VALUE "ProductVersion", "1.1.0.1"
         END
     END
     BLOCK "VarFileInfo"
@@ -449,8 +449,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 1,1,0,1
+ PRODUCTVERSION 1,1,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -467,12 +467,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Noisyfox"
             VALUE "FileDescription", "NUAA Network Assistant"
-            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "FileVersion", "1.1.0.1"
             VALUE "InternalName", "NUAA Network Assistant"
             VALUE "LegalCopyright", "Copyright 2014 Noisyfox"
             VALUE "OriginalFilename", "NUAA Network Assistant.exe"
             VALUE "ProductName", "NUAA Network Assistant"
-            VALUE "ProductVersion", "1, 0, 0, 1"
+            VALUE "ProductVersion", "1.1.0.1"
         END
     END
     BLOCK "VarFileInfo"
