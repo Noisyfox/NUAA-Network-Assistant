@@ -215,6 +215,11 @@ BEGIN
     IDS_ERR_SEMANOTFOUND    "无法找到窗口"
     IDS_BTN_DIAL_CONNECT    "连接"
     IDS_BTN_DIAL_DISCONNECT "断开"
+    IDS_ERR_NOPCAP          "检测到你可能没有安装WinPcap！本程序的部分重要功能需要WinPcap的支持。是否现在就安装？"
+    IDS_NO_INSTALL_WPCAP    "你没有安装WinPcap，当你试图使用需要WinPcap的功能时将会再次提醒安装。"
+    IDS_INSTALL_WPCAP_FAIL  "安装WinPcap失败，当你试图使用需要WinPcap的功能时将会再次提尝试安装。"
+    IDS_ERR_NOPCAP_MUST     "检测到你可能没有安装WinPcap！该功能需要WinPcap的支持。是否现在就安装？"
+    IDS_NO_INSTALL_WPCAP_MUST "你没有安装WinPcap，该功能无法开启。"
 END
 
 STRINGTABLE
@@ -293,6 +298,11 @@ END
 STRINGTABLE
 BEGIN
     ATL_IDS_MRU_FILE        "Open this document"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_INSTALL_WPCAP_FAIL_MUST "安装WinPcap失败，该功能无法开启。"
 END
 
 #endif    // 中文(简体，中国) resources
@@ -433,6 +443,45 @@ BEGIN
 END
 
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Noisyfox"
+            VALUE "FileDescription", "NUAA Network Assistant"
+            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "InternalName", "NUAA Network Assistant"
+            VALUE "LegalCopyright", "Copyright 2014 Noisyfox"
+            VALUE "OriginalFilename", "NUAA Network Assistant.exe"
+            VALUE "ProductName", "NUAA Network Assistant"
+            VALUE "ProductVersion", "1, 0, 0, 1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -484,45 +533,6 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Version
-//
-
-VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
- FILEFLAGSMASK 0x3fL
-#ifdef _DEBUG
- FILEFLAGS 0x1L
-#else
- FILEFLAGS 0x0L
-#endif
- FILEOS 0x4L
- FILETYPE 0x2L
- FILESUBTYPE 0x0L
-BEGIN
-    BLOCK "StringFileInfo"
-    BEGIN
-        BLOCK "040904b0"
-        BEGIN
-            VALUE "CompanyName", "Noisyfox"
-            VALUE "FileDescription", "NUAA Network Assistant"
-            VALUE "FileVersion", "1, 0, 0, 1"
-            VALUE "InternalName", "NUAA Network Assistant"
-            VALUE "LegalCopyright", "Copyright 2014 Noisyfox"
-            VALUE "OriginalFilename", "NUAA Network Assistant.exe"
-            VALUE "ProductName", "NUAA Network Assistant"
-            VALUE "ProductVersion", "1, 0, 0, 1"
-        END
-    END
-    BLOCK "VarFileInfo"
-    BEGIN
-        VALUE "Translation", 0x409, 1200
-    END
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // String Table
 //
 
@@ -535,6 +545,12 @@ BEGIN
     IDS_ERR_SEMANOTFOUND    "Cannot find the window"
     IDS_BTN_DIAL_CONNECT    "Connect"
     IDS_BTN_DIAL_DISCONNECT "Disconnect"
+    IDS_ERR_NOPCAP          "You have no WinPcap installed! Some functions need WinPcap. Install now?"
+    IDS_NO_INSTALL_WPCAP    "You chose not to install WinPcap, you'll get notified when need WinPcap."
+    IDS_INSTALL_WPCAP_FAIL  "Install WinPcap failed, will try again when needed."
+    IDS_ERR_NOPCAP_MUST     "You have no WinPcap installed! This function needs WinPcap. Install now?"
+    IDS_NO_INSTALL_WPCAP_MUST 
+                            "You chose not to install WinPcap, this function will not work."
 END
 
 STRINGTABLE
@@ -613,6 +629,12 @@ END
 STRINGTABLE
 BEGIN
     ATL_IDS_MRU_FILE        "Open this document"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_INSTALL_WPCAP_FAIL_MUST 
+                            "Install WinPcap failed, this function will not work."
 END
 
 #endif    // 英语(美国) resources

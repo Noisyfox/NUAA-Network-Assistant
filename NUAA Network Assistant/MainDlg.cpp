@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "resource.h"
 
+#include "Dependency.hpp"
 #include "MainDlg.h"
 #include "AdapterSelectDlg.h"
 #include "Util.h"
@@ -37,6 +38,37 @@ BOOL CMainDlg::DeleteNotificationIcon()
 {
 	// ÔÚÍÐÅÌÇøÉ¾³ýÍ¼±ê
 	return Shell_NotifyIcon(NIM_DELETE, &m_nid);
+}
+
+BOOL CMainDlg::EnsureWpcap()
+{
+	//¼ì²âwinpcap
+	if (!Dependency::CheckWpcap())
+	{
+		CString no_wpcap;
+		no_wpcap.LoadString(IDS_ERR_NOPCAP_MUST);
+		int nResponse = MessageBox(no_wpcap, NULL, MB_ICONQUESTION | MB_YESNO);
+		if (nResponse == IDNO)
+		{
+			CString no_install;
+			no_install.LoadString(IDS_NO_INSTALL_WPCAP_MUST);
+			MessageBox(no_install, NULL, MB_ICONERROR);
+
+			return FALSE;
+		}
+		else{
+			if (!Dependency::InstallWpcap() || !Dependency::CheckWpcap())
+			{
+				CString install_fail;
+				install_fail.LoadString(IDS_INSTALL_WPCAP_FAIL_MUST);
+				MessageBox(install_fail, NULL, MB_ICONERROR);
+
+				return FALSE;
+			}
+		}
+	}
+
+	return TRUE;
 }
 
 LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
@@ -126,6 +158,9 @@ LRESULT CMainDlg::OnChangeAdapter(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 
 LRESULT CMainDlg::OnDial(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+
+	if (!EnsureWpcap())return 0;
+
 	CString account, passwd;
 	m_edtDialAccount.GetWindowText(account);
 	m_edtDialPasswd.GetWindowText(passwd);
@@ -172,6 +207,11 @@ LRESULT CMainDlg::OnEnableRediClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /
 	BOOL check = m_btnEnableRedi.GetCheck();
 
 	if (check){
+		if (!EnsureWpcap()){
+			m_btnEnableRedi.SetCheck(FALSE);
+			return 0;
+		}
+
 		int nRet = _NAT.Setup(_NetInfo);
 		if (nRet != NO_ERROR && nRet != ERROR_SERVICE_ALREADY_RUNNING)
 		{

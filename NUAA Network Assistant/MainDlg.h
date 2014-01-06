@@ -13,13 +13,14 @@ private:
 	UINT m_msgTaskbarRestart;
 	HICON hIcon, hIconSmall;
 	CString m_appName, m_strDialConnect, m_strDialDisconnect;
+	CButton m_btnEnableLan, m_btnEnableRedi, m_btnEnableCampus, m_btnDial;
+	CEdit m_edtDialAccount, m_edtDialPasswd;
 
 	void ShowNetInfo(NetInfo * info);
 	BOOL CreateNotificationIcon();
 	BOOL DeleteNotificationIcon();
 
-	CButton m_btnEnableLan, m_btnEnableRedi, m_btnEnableCampus, m_btnDial;
-	CEdit m_edtDialAccount, m_edtDialPasswd;
+	BOOL EnsureWpcap();
 public:
 
 	CMainDlg();

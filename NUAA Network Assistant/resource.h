@@ -11,10 +11,17 @@
 #define IDS_ERR_SEMANOTFOUND            132
 #define IDS_BTN_DIAL_CONNECT            133
 #define IDS_BTN_DIAL_DISCONNECT         134
+#define IDS_ERR_NOPCAP_QUE              135
+#define IDS_ERR_NOPCAP                  135
+#define IDS_NO_INSTALL_WPCAP            136
+#define IDS_INSTALL_WPCAP_FAIL          137
+#define IDS_ERR_NOPCAP_MUST             138
+#define IDS_NO_INSTALL_WPCAP_MUST       139
 #define IDD_SELECTADAPTER               201
 #define IDD_SELECTADAPTER1              202
 #define IDD_ABOUTBOX1                   202
 #define IDR_NOTIMENU                    204
+#define IDS_INSTALL_WPCAP_FAIL_MUST     206
 #define IDC_COMBO1                      1001
 #define IDC_ADAPTERLIST                 1001
 #define IDC_NETINFO_LOCMAC              1002
@@ -53,7 +60,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        206
+#define _APS_NEXT_RESOURCE_VALUE        207
 #define _APS_NEXT_COMMAND_VALUE         32786
 #define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           101

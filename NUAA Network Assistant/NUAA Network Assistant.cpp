@@ -8,6 +8,8 @@
 #include "MainDlg.h"
 #include "AdapterSelectDlg.h"
 
+#include "Dependency.hpp"
+
 CAppModule _Module;
 Config _Config;
 NetDetector _NetDetector;
@@ -78,6 +80,33 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
 			_Config.Load();
 		}
 
+		{
+			if (_Config.cfg_firstRun)
+			{
+				//检测winpcap
+				if (!Dependency::CheckWpcap())
+				{
+					CString no_wpcap;
+					no_wpcap.LoadString(IDS_ERR_NOPCAP);
+					int nResponse = MessageBox(NULL, no_wpcap, NULL, MB_ICONQUESTION | MB_YESNO);
+					if (nResponse == IDNO)
+					{
+						CString no_install;
+						no_install.LoadString(IDS_NO_INSTALL_WPCAP);
+						MessageBox(NULL, no_install, NULL, MB_ICONERROR);
+					}
+					else{
+						if (!Dependency::InstallWpcap() || !Dependency::CheckWpcap())
+						{
+							CString install_fail;
+							install_fail.LoadString(IDS_INSTALL_WPCAP_FAIL);
+							MessageBox(NULL, install_fail, NULL, MB_ICONERROR);
+						}
+					}
+				}
+			}
+		}
+
 		if (!_NetDetector.AutoSetAdapter() || !_NetDetector.ObtainInformation(_NetInfo)){
 			MessageBox(NULL, _T("无法自动检测内网接口，请手动选择正确的网络适配器。"), NULL, MB_ICONERROR);
 			CAdapterSelectDlg dlgAdaptSelect;
@@ -92,6 +121,9 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
 
 		CMainDlg dlgMain;
 		nRet = dlgMain.DoModal();
+
+		_Config.cfg_firstRun = 0;
+		_Config.Save();
 	}
 
 quit:
