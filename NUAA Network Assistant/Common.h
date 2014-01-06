@@ -20,7 +20,6 @@
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "wpcap.lib")
 
-extern Config _Config;
 extern NetDetector _NetDetector;
 extern NetInfo _NetInfo;
 extern ArpHacker _ArpHacker;

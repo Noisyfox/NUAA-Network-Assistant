@@ -2,13 +2,14 @@
 
 class Config
 {
-	CString m_filePath;
+	static CString m_filePath;
 public:
-	CString cfg_tAccount;
-	CString cfg_tPasswd;
-	BOOL cfg_firstRun;
+	static CString cfg_tAccount;
+	static CString cfg_tPasswd;
+	static BOOL cfg_firstRun;
+	static BOOL cfg_startOnBoot;
 
-	void SetFile(CString &path);
-	BOOL Load();
-	BOOL Save();
+	static void SetFile(CString &path);
+	static BOOL Load();
+	static BOOL Save();
 };

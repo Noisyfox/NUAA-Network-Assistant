@@ -11,7 +11,6 @@
 #include "Dependency.hpp"
 
 CAppModule _Module;
-Config _Config;
 NetDetector _NetDetector;
 NetInfo _NetInfo;
 ArpHacker _ArpHacker;
@@ -76,12 +75,12 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
 			GetModuleFileName(NULL, tp, MAX_PATH);
 			PathRemoveFileSpec(tp);
 			PathCombine(config_path, tp, _T("config.ini"));
-			_Config.SetFile(CString(config_path));
-			_Config.Load();
+			Config::SetFile(CString(config_path));
+			Config::Load();
 		}
 
 		{
-			if (_Config.cfg_firstRun)
+			if (Config::cfg_firstRun)
 			{
 				//¼ì²âwinpcap
 				if (!Dependency::CheckWpcap())
@@ -122,8 +121,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
 		CMainDlg dlgMain;
 		nRet = dlgMain.DoModal();
 
-		_Config.cfg_firstRun = 0;
-		_Config.Save();
+		Config::cfg_firstRun = 0;
+		Config::Save();
 	}
 
 quit:
