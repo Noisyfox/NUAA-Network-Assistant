@@ -18,7 +18,7 @@ RouteHacker _RouteHacker;
 NAT _NAT;
 TianyiDial _TianyiDial;
 
-int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*lpstrCmdLine*/, int /*nCmdShow*/)
+int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int /*nCmdShow*/)
 {
 //	HRESULT hRes = ::CoInitialize(NULL);
 // If you are running on NT 4.0 or higher you can use the following call instead to 
@@ -118,7 +118,10 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR /*
 			}
 		}
 
-		CMainDlg dlgMain;
+		BOOL show = TRUE;
+		if (CString(lpstrCmdLine) == _T("hide"))show = FALSE;
+
+		CMainDlg dlgMain(show);
 		nRet = dlgMain.DoModal();
 
 		Config::cfg_firstRun = 0;

@@ -12,4 +12,6 @@ public:
 	static void SetFile(CString &path);
 	static BOOL Load();
 	static BOOL Save();
+
+	static BOOL SetBoot(BOOL boot);
 };

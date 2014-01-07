@@ -10,7 +10,7 @@
 #include "AdapterSelectDlg.h"
 #include "Util.h"
 
-CMainDlg::CMainDlg()
+CMainDlg::CMainDlg(BOOL show)
 {
 	m_appName.LoadString(IDR_MAINFRAME);
 	m_strDialConnect.LoadString(IDS_BTN_DIAL_CONNECT);
@@ -19,6 +19,8 @@ CMainDlg::CMainDlg()
 	hIcon = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR, ::GetSystemMetrics(SM_CXICON), ::GetSystemMetrics(SM_CYICON));
 	hIconSmall = AtlLoadIconImage(IDR_MAINFRAME, LR_DEFAULTCOLOR, ::GetSystemMetrics(SM_CXSMICON), ::GetSystemMetrics(SM_CYSMICON));
 	m_msgTaskbarRestart = RegisterWindowMessage(_T("TaskbarCreated"));
+
+	m_hideOnStart = !show;
 }
 
 BOOL CMainDlg::CreateNotificationIcon()
@@ -88,6 +90,7 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	m_btnEnableRedi = GetDlgItem(IDC_CHECK_ENABLEREDI);
 	m_btnEnableCampus = GetDlgItem(IDC_CHECK_ENABLECAMPUS);
 	m_btnDial = GetDlgItem(IDC_DIAL);
+	m_btnBoot = GetDlgItem(IDC_CHECK_STARTONBOOT);
 
 	m_edtDialAccount = GetDlgItem(IDC_DIAL_ACCOUNT);
 	m_edtDialPasswd = GetDlgItem(IDC_DIAL_PASSWD);
@@ -106,6 +109,7 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	//加载配置
 	m_edtDialAccount.SetWindowText(Config::cfg_tAccount);
 	m_edtDialPasswd.SetWindowText(Config::cfg_tPasswd);
+	m_btnBoot.SetCheck(Config::cfg_startOnBoot);
 
 	return TRUE;
 }
@@ -241,6 +245,18 @@ LRESULT CMainDlg::OnEnableCampusClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND
 	return 0;
 }
 
+LRESULT CMainDlg::OnStartOnBootClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+	BOOL check = m_btnBoot.GetCheck();
+
+	Config::cfg_startOnBoot = check;
+	Config::Save();
+
+	Config::SetBoot(check);
+
+	return 0;
+}
+
 LRESULT CMainDlg::OnNotiToggleEnableLan(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
 	m_btnEnableLan.SetCheck(!m_btnEnableLan.GetCheck());
@@ -264,6 +280,12 @@ LRESULT CMainDlg::OnNotiToggleCampusNet(WORD /*wNotifyCode*/, WORD /*wID*/, HWND
 
 LRESULT CMainDlg::OnSize(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
+	if (m_hideOnStart)
+	{
+		m_hideOnStart = FALSE;
+		ShowWindow(SW_HIDE);//开机自启时隐藏窗口
+	}
+
 	if (wParam == SIZE_MINIMIZED)
 	{
 		ShowWindow(SW_HIDE); // 当最小化时，隐藏主窗口              

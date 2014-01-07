@@ -9,11 +9,12 @@
 class CMainDlg : public CDialogImpl<CMainDlg>
 {
 private:
+	BOOL m_hideOnStart;
 	NOTIFYICONDATA m_nid;
 	UINT m_msgTaskbarRestart;
 	HICON hIcon, hIconSmall;
 	CString m_appName, m_strDialConnect, m_strDialDisconnect;
-	CButton m_btnEnableLan, m_btnEnableRedi, m_btnEnableCampus, m_btnDial;
+	CButton m_btnEnableLan, m_btnEnableRedi, m_btnEnableCampus, m_btnDial, m_btnBoot;
 	CEdit m_edtDialAccount, m_edtDialPasswd;
 
 	void ShowNetInfo(NetInfo * info);
@@ -22,8 +23,7 @@ private:
 
 	BOOL EnsureWpcap();
 public:
-
-	CMainDlg();
+	CMainDlg(BOOL show = TRUE);
 
 	enum { IDD = IDD_MAINDLG };
 
@@ -41,6 +41,7 @@ public:
 		COMMAND_ID_HANDLER(IDC_CHECK_ENABLELAN, OnEnableLanClicked)
 		COMMAND_ID_HANDLER(IDC_CHECK_ENABLEREDI, OnEnableRediClicked)
 		COMMAND_ID_HANDLER(IDC_CHECK_ENABLECAMPUS, OnEnableCampusClicked)
+		COMMAND_ID_HANDLER(IDC_CHECK_STARTONBOOT, OnStartOnBootClicked)
 		COMMAND_ID_HANDLER(ID_NOTI_ENLAN, OnNotiToggleEnableLan)
 		COMMAND_ID_HANDLER(ID_NOTI_ENREDI, OnNotiToggleEnableRedi)
 		COMMAND_ID_HANDLER(ID_NOTI_ENCAMPUS, OnNotiToggleCampusNet)
@@ -65,6 +66,7 @@ public:
 	LRESULT OnEnableLanClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnEnableRediClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnEnableCampusClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnStartOnBootClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnNotiToggleEnableLan(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnNotiToggleEnableRedi(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnNotiToggleCampusNet(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);

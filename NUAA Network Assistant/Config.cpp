@@ -36,3 +36,30 @@ BOOL Config::Save()
 
 	return TRUE;
 }
+
+BOOL Config::SetBoot(BOOL boot)
+{
+	CRegKey BootReg;
+	CString ps = _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+	CString valueName = _T("NUAANetAssistant");
+
+	LSTATUS lResult = BootReg.Open(HKEY_CURRENT_USER, ps, KEY_ALL_ACCESS);
+
+	if (lResult != ERROR_SUCCESS)return FALSE;
+
+	if (boot)
+	{
+		CString ExecPath;
+		TCHAR tp[MAX_PATH] = _T("");
+		GetModuleFileName(NULL, tp, MAX_PATH);
+		ExecPath.Format(_T("\"%s\" hide"), tp);
+		lResult = BootReg.SetStringValue(valueName, ExecPath);
+	}
+	else {
+		lResult = BootReg.DeleteValue(valueName);
+	}
+	BootReg.Flush();
+	BootReg.Close();
+
+	return lResult == ERROR_SUCCESS;
+}
