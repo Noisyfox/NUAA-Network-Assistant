@@ -146,6 +146,9 @@ LRESULT CMainDlg::OnChangeAdapter(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 		dlgAdaptSelect.GetSelNet(_NetInfo);
 		ShowNetInfo(&_NetInfo);
 
+		Config::cfg_adapter = _NetInfo.sAdapterName;
+		Config::Save();
+
 		m_btnEnableLan.SetCheck(FALSE);
 		m_btnEnableRedi.SetCheck(FALSE);
 		m_btnEnableCampus.SetCheck(FALSE);

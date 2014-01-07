@@ -106,7 +106,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 			}
 		}
 
-		if (!_NetDetector.AutoSetAdapter() || !_NetDetector.ObtainInformation(_NetInfo)){
+		if (!_NetDetector.AutoSetAdapter(Config::cfg_adapter) || !_NetDetector.ObtainInformation(_NetInfo)){
 			MessageBox(NULL, _T("无法自动检测内网接口，请手动选择正确的网络适配器。"), NULL, MB_ICONERROR);
 			CAdapterSelectDlg dlgAdaptSelect;
 			nRet = dlgAdaptSelect.DoModal();
@@ -117,6 +117,9 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 				goto quit;
 			}
 		}
+
+		Config::cfg_adapter = _NetInfo.sAdapterName;
+		Config::Save();
 
 		BOOL show = TRUE;
 		if (CString(lpstrCmdLine) == _T("hide"))show = FALSE;

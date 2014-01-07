@@ -6,6 +6,7 @@ class Config
 public:
 	static CString cfg_tAccount;
 	static CString cfg_tPasswd;
+	static CString cfg_adapter;
 	static BOOL cfg_firstRun;
 	static BOOL cfg_startOnBoot;
 

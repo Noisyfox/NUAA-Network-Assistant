@@ -56,29 +56,49 @@ BOOL NetDetector::ListAllAdapter(PIP_ADAPTER_INFO & adapterInfo, BOOL forceResca
 	return TRUE;
 }
 
-BOOL NetDetector::AutoSetAdapter()
+BOOL NetDetector::AutoSetAdapter(CString defaultAdapter)
 {
 	DWORD mask, gateway;
 	gateway = inet_addr("172.19.0.0");
 	mask = inet_addr("255.255.0.0");
 
-	PIP_ADAPTER_INFO pAdapter;
+	PIP_ADAPTER_INFO pAdapter, _tmpAdapter;
 	if (!ListAllAdapter(pAdapter, FALSE)){
 		return FALSE;
 	}
+	
+	defaultAdapter.ReleaseBuffer();
+	BOOL hasDefaultAdapter = !defaultAdapter.IsEmpty();
 
-	// 枚举所有适配器
-	while (pAdapter)
+	if (hasDefaultAdapter)
 	{
-		IPAddr ip = inet_addr(pAdapter->GatewayList.IpAddress.String);
+		_tmpAdapter = pAdapter;
+		// 枚举所有适配器
+		while (_tmpAdapter)
+		{
+			if (CString(_tmpAdapter->AdapterName) == defaultAdapter)
+			{
+				// 保存信息
+				return SetAdapter(_tmpAdapter);
+			}
+			_tmpAdapter = _tmpAdapter->Next;
+		}
+	}
+
+	//没有找到默认的适配器或者没有设置默认的适配器
+	_tmpAdapter = pAdapter;
+	// 枚举所有适配器
+	while (_tmpAdapter)
+	{
+		IPAddr ip = inet_addr(_tmpAdapter->GatewayList.IpAddress.String);
 		BYTE * addr = (BYTE*)&ip;
 
 		if ((ip & mask) == (gateway & mask))
 		{
 			// 保存信息
-			return SetAdapter(pAdapter);
+			return SetAdapter(_tmpAdapter);
 		}
-		pAdapter = pAdapter->Next;
+		_tmpAdapter = _tmpAdapter->Next;
 	}
 
 	return FALSE;

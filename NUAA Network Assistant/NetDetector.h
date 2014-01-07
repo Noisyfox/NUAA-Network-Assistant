@@ -22,7 +22,7 @@ public:
 	~NetDetector();
 
 	BOOL ListAllAdapter(PIP_ADAPTER_INFO & adapterInfo, BOOL forceRescan);
-	BOOL AutoSetAdapter();
+	BOOL AutoSetAdapter(CString defaultAdapter = _T(""));
 	BOOL SetAdapter(PIP_ADAPTER_INFO adapter);
 	//BOOL SetAdapter(DWORD index);
 	BOOL ObtainInformation(NetInfo & info);
