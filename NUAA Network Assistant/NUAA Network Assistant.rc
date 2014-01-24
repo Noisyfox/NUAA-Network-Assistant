@@ -93,8 +93,9 @@ BEGIN
     LTEXT           "密码:",IDC_STATIC,18,86,20,8
     EDITTEXT        IDC_DIAL_PASSWD,60,84,102,14,ES_PASSWORD | ES_AUTOHSCROLL
     PUSHBUTTON      "连接",IDC_DIAL,114,126,48,14
-    LTEXT           "未连接.",IDC_DIAL_STATUS,18,102,90,36,WS_DISABLED
+    LTEXT           "未连接.",IDC_DIAL_STATUS,18,102,78,36,WS_DISABLED
     CONTROL         "开机自动启动",IDC_CHECK_STARTONBOOT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,179,134,64,10
+    COMBOBOX        IDC_DIALMODE,102,102,60,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 177, 109
@@ -221,6 +222,7 @@ BEGIN
     IDS_INSTALL_WPCAP_FAIL  "安装WinPcap失败，当你试图使用需要WinPcap的功能时将会再次提尝试安装。"
     IDS_ERR_NOPCAP_MUST     "检测到你可能没有安装WinPcap！该功能需要WinPcap的支持。是否现在就安装？"
     IDS_NO_INSTALL_WPCAP_MUST "你没有安装WinPcap，该功能无法开启。"
+    IDS_DIALMODE            "拨号模式"
 END
 
 STRINGTABLE
@@ -387,8 +389,9 @@ BEGIN
     LTEXT           "Password:",IDC_STATIC,18,86,34,8
     EDITTEXT        IDC_DIAL_PASSWD,60,84,102,14,ES_PASSWORD | ES_AUTOHSCROLL
     PUSHBUTTON      "Connect",IDC_DIAL,114,126,48,14
-    LTEXT           "Not connected.",IDC_DIAL_STATUS,18,102,89,36,WS_DISABLED
+    LTEXT           "Not connected.",IDC_DIAL_STATUS,18,102,78,36,WS_DISABLED
     CONTROL         "Start on boot",IDC_CHECK_STARTONBOOT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,179,134,59,10
+    COMBOBOX        IDC_DIALMODE,102,102,60,30,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -553,6 +556,7 @@ BEGIN
     IDS_ERR_NOPCAP_MUST     "You have no WinPcap installed! This function needs WinPcap. Install now?"
     IDS_NO_INSTALL_WPCAP_MUST 
                             "You chose not to install WinPcap, this function will not work."
+    IDS_DIALMODE            "Dial mode "
 END
 
 STRINGTABLE

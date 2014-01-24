@@ -45,6 +45,7 @@ public:
 		COMMAND_ID_HANDLER(ID_NOTI_ENLAN, OnNotiToggleEnableLan)
 		COMMAND_ID_HANDLER(ID_NOTI_ENREDI, OnNotiToggleEnableRedi)
 		COMMAND_ID_HANDLER(ID_NOTI_ENCAMPUS, OnNotiToggleCampusNet)
+		COMMAND_HANDLER(IDC_DIALMODE, CBN_SELCHANGE, OnComboDialModeSelChange)
 	END_MSG_MAP()
 
 // Handler prototypes (uncomment arguments if needed):
@@ -70,4 +71,5 @@ public:
 	LRESULT OnNotiToggleEnableLan(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnNotiToggleEnableRedi(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnNotiToggleCampusNet(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnComboDialModeSelChange(WORD /*wNotifyCode*/, WORD /*wID*/, HWND hWndCtl, BOOL& /*bHandled*/);
 };

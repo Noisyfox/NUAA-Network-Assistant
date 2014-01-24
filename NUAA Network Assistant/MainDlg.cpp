@@ -111,6 +111,21 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	m_edtDialPasswd.SetWindowText(Config::cfg_tPasswd);
 	m_btnBoot.SetCheck(Config::cfg_startOnBoot);
 
+	CString dialMode;
+	dialMode.LoadString(IDS_DIALMODE);
+	CComboBox combo = GetDlgItem(IDC_DIALMODE);
+	int dialModeCount = _TianyiDial.GetDialModeCount();
+	for (int i = 1; i <= dialModeCount; i++){
+		CString _t;
+		_t.Format(_T("%s%d"), dialMode, i);
+		combo.AddString(_t);
+	}
+
+	if (!_TianyiDial.SetDialMode(Config::cfg_tDialMode)){
+		Config::cfg_tDialMode = 0;
+	}
+	combo.SetCurSel(Config::cfg_tDialMode);
+
 	return TRUE;
 }
 
@@ -256,6 +271,24 @@ LRESULT CMainDlg::OnStartOnBootClicked(WORD /*wNotifyCode*/, WORD /*wID*/, HWND 
 	Config::Save();
 
 	Config::SetBoot(check);
+
+	return 0;
+}
+
+LRESULT CMainDlg::OnComboDialModeSelChange(WORD /*wNotifyCode*/, WORD /*wID*/, HWND hWndCtl, BOOL& /*bHandled*/)
+{
+	CComboBox combo = (CComboBox)hWndCtl;
+
+	int sel = combo.GetCurSel();
+
+	if (!_TianyiDial.SetDialMode(sel)){
+		_TianyiDial.SetDialMode(Config::cfg_tDialMode);
+		combo.SetCurSel(Config::cfg_tDialMode);
+	}
+	else {
+		Config::cfg_tDialMode = sel;
+		Config::Save();
+	}
 
 	return 0;
 }

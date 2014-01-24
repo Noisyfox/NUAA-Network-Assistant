@@ -17,6 +17,7 @@
 #define IDS_INSTALL_WPCAP_FAIL          137
 #define IDS_ERR_NOPCAP_MUST             138
 #define IDS_NO_INSTALL_WPCAP_MUST       139
+#define IDS_DIALMODE                    140
 #define IDD_SELECTADAPTER               201
 #define IDD_SELECTADAPTER1              202
 #define IDD_ABOUTBOX1                   202
@@ -24,6 +25,7 @@
 #define IDS_INSTALL_WPCAP_FAIL_MUST     206
 #define IDC_COMBO1                      1001
 #define IDC_ADAPTERLIST                 1001
+#define IDC_DIALMODE                    1001
 #define IDC_NETINFO_LOCMAC              1002
 #define IDC_NETINFO_LOCIP               1003
 #define IDC_NETINFO_LOCMASK             1004
@@ -45,7 +47,6 @@
 #define IDC_CHECK_ENABLELAN2            1020
 #define IDC_CHECK_ENABLEREDI            1020
 #define IDC_DIAL_STATUS                 1021
-#define IDC_CHECK1                      1022
 #define IDC_CHECK_STARTONBOOT           1022
 #define ID_NOTI_EXIT                    32776
 #define IDC                             32777
@@ -62,7 +63,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        207
+#define _APS_NEXT_RESOURCE_VALUE        208
 #define _APS_NEXT_COMMAND_VALUE         32786
 #define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           101

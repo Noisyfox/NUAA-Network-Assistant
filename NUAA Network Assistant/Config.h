@@ -9,6 +9,7 @@ public:
 	static CString cfg_adapter;
 	static BOOL cfg_firstRun;
 	static BOOL cfg_startOnBoot;
+	static INT cfg_tDialMode;
 
 	static void SetFile(CString &path);
 	static BOOL Load();

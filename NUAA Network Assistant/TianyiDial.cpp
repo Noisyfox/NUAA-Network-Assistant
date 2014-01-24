@@ -5,7 +5,8 @@
 
 HWND TianyiDial::m_msg_hwnd = NULL;
 
-TianyiDial::TianyiDial()
+TianyiDial::TianyiDial():
+m_dial_mode(&TianyiDial::DialMode_Emulate)
 {
 }
 
@@ -62,7 +63,86 @@ void DialThread(TianyiDial* dial, CString account, CString passwd)
 	dial->m_tydial.PatchAuth(-1, T2A(account), T2A(passwd));
 }
 
+BOOL TianyiDial::SetDialMode(int mode)
+{
+	switch (mode){
+	case 0:
+		m_dial_mode = &TianyiDial::DialMode_Emulate;
+		break;
+	case 1:
+		m_dial_mode = &TianyiDial::DialMode_PAP_Prefix;
+		break;
+	case 2:
+		m_dial_mode = &TianyiDial::DialMode_CHAP_Postfix;
+		break;
+	default:
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 BOOL TianyiDial::Dial(NetInfo adapter, CString account, CString passwd)
+{
+	return (this->*m_dial_mode)(adapter, account, passwd);
+}
+
+BOOL TianyiDial::Disconnect()
+{
+	if (hRasConn != NULL){
+		RasHangUp(hRasConn);
+		RasDialCallback(0, RASCS_Disconnected, 0);
+	}
+
+	hRasConn = NULL;
+
+	return 0;
+}
+
+BOOL TianyiDial::IsConnected()
+{
+	return hRasConn != NULL;
+}
+
+BOOL TianyiDial::CreatePPPOE(BOOL chap)
+{
+	//创建拨号连接
+	LPRASENTRY lpRasEntry = NULL;
+	DWORD cb = sizeof(RASENTRY);
+	DWORD dwBufferSize = 0;
+	DWORD dwRet = 0;
+
+	// 取得entry的大小,这句也不知道是不是必须的,因为sizeof(RASENTRY)和这里取到的dwBufferSize是一样的,不过还是Get一下安全点
+	RasGetEntryProperties(NULL, _T(""), NULL, &dwBufferSize, NULL, NULL);
+	if (dwBufferSize == 0)
+		return FALSE;
+
+	lpRasEntry = (LPRASENTRY)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwBufferSize);
+	if (lpRasEntry == NULL)
+		return FALSE;
+
+	ZeroMemory(lpRasEntry, sizeof(RASENTRY));
+	lpRasEntry->dwSize = dwBufferSize;
+	lpRasEntry->dwfOptions = RASEO_PreviewUserPw | RASEO_RemoteDefaultGateway | RASEO_RequirePAP; // RASEO_PreviewUserPw需要显示ui
+	if (chap) lpRasEntry->dwfOptions |= RASEO_RequireCHAP;
+	lpRasEntry->dwType = RASET_Broadband;
+	lpRasEntry->dwEncryptionType = ET_Optional;
+
+	lstrcpy(lpRasEntry->szDeviceType, RASDT_PPPoE);
+	lstrcpy(lpRasEntry->szDeviceName, _T(""));
+	lpRasEntry->dwfNetProtocols = RASNP_Ip;
+	lpRasEntry->dwFramingProtocol = RASFP_Ppp;
+
+	dwRet = RasSetEntryProperties(NULL, _T("Vnet_PPPoE"), lpRasEntry, dwBufferSize, NULL, 0); // 创建连接
+	HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasEntry);
+
+	if (dwRet != 0)
+		return FALSE;
+
+	return TRUE;
+}
+
+BOOL TianyiDial::DialMode_Emulate(NetInfo adapter, CString account, CString passwd)
 {
 	if (m_service_thread != NULL)return FALSE;
 
@@ -78,48 +158,16 @@ BOOL TianyiDial::Dial(NetInfo adapter, CString account, CString passwd)
 
 	if (!m_tydial.Init(dev_name))return FALSE;
 
-	RASDIALPARAMS rdParams;
-	DWORD dwRet = 0;
-	hRasConn = NULL;
-	CString str;
-
+	//CString str;
 	//CString code(tysession->code.c_str());
 	//str.Format(_T("正在使用动态密码 %s 拨号..."), code);
 	//m_statusbar.SetPaneText(0, str);
 
-	{
-		//创建拨号连接
-		LPRASENTRY lpRasEntry = NULL;
-		DWORD cb = sizeof(RASENTRY);
-		DWORD dwBufferSize = 0;
-		DWORD dwRet = 0;
+	if (!CreatePPPOE(TRUE))return FALSE;
 
-		// 取得entry的大小,这句也不知道是不是必须的,因为sizeof(RASENTRY)和这里取到的dwBufferSize是一样的,不过还是Get一下安全点
-		RasGetEntryProperties(NULL, _T(""), NULL, &dwBufferSize, NULL, NULL);
-		if (dwBufferSize == 0)
-			return FALSE;
-
-		lpRasEntry = (LPRASENTRY)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, dwBufferSize);
-		if (lpRasEntry == NULL)
-			return FALSE;
-
-		ZeroMemory(lpRasEntry, sizeof(RASENTRY));
-		lpRasEntry->dwSize = dwBufferSize;
-		lpRasEntry->dwfOptions = RASEO_PreviewUserPw | RASEO_RemoteDefaultGateway | RASEO_RequireCHAP; // RASEO_PreviewUserPw需要显示ui
-		lpRasEntry->dwType = RASET_Broadband;
-		lpRasEntry->dwEncryptionType = ET_Optional;
-
-		lstrcpy(lpRasEntry->szDeviceType, RASDT_PPPoE);
-		lstrcpy(lpRasEntry->szDeviceName, _T(""));
-		lpRasEntry->dwfNetProtocols = RASNP_Ip;
-		lpRasEntry->dwFramingProtocol = RASFP_Ppp;
-
-		dwRet = RasSetEntryProperties(NULL, _T("Vnet_PPPoE"), lpRasEntry, dwBufferSize, NULL, 0); // 创建连接
-		HeapFree(GetProcessHeap(), 0, (LPVOID)lpRasEntry);
-
-		if (dwRet != 0)
-			return FALSE;
-	}
+	RASDIALPARAMS rdParams;
+	DWORD dwRet = 0;
+	hRasConn = NULL;
 
 	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
 	rdParams.dwSize = sizeof(RASDIALPARAMS);
@@ -139,19 +187,58 @@ BOOL TianyiDial::Dial(NetInfo adapter, CString account, CString passwd)
 	return TRUE;
 }
 
-BOOL TianyiDial::Disconnect()
+BOOL TianyiDial::DialMode_PAP_Prefix(NetInfo adapter, CString account, CString passwd)
 {
-	if (hRasConn != NULL){
-		RasHangUp(hRasConn);
-		RasDialCallback(0, RASCS_Disconnected, 0);
+	Disconnect();
+
+	if (!CreatePPPOE(FALSE))return FALSE;
+
+	RASDIALPARAMS rdParams;
+	DWORD dwRet = 0;
+	hRasConn = NULL;
+	CString rAccount;
+
+	rAccount.Format(_T("%s%s"), PAP_PREFIX, account);
+
+	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
+	rdParams.dwSize = sizeof(RASDIALPARAMS);
+	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
+	lstrcpy(rdParams.szUserName, rAccount);
+	lstrcpy(rdParams.szPassword, passwd);
+
+	dwRet = RasDial(NULL, NULL, &rdParams, 0L, (RASDIALFUNC)(this->RasDialCallback), &hRasConn);
+	if (dwRet != ERROR_SUCCESS)
+	{
+		return FALSE;
 	}
 
-	hRasConn = NULL;
-
-	return 0;
+	return TRUE;
 }
 
-BOOL TianyiDial::IsConnected()
+BOOL TianyiDial::DialMode_CHAP_Postfix(NetInfo adapter, CString account, CString passwd)
 {
-	return hRasConn != NULL;
+	Disconnect();
+
+	if (!CreatePPPOE(TRUE))return FALSE;
+
+	RASDIALPARAMS rdParams;
+	DWORD dwRet = 0;
+	hRasConn = NULL;
+	CString rAccount;
+
+	rAccount.Format(_T("%s%s"), account, CHAP_POSTFIX);
+
+	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
+	rdParams.dwSize = sizeof(RASDIALPARAMS);
+	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
+	lstrcpy(rdParams.szUserName, rAccount);
+	lstrcpy(rdParams.szPassword, passwd);
+
+	dwRet = RasDial(NULL, NULL, &rdParams, 0L, (RASDIALFUNC)(this->RasDialCallback), &hRasConn);
+	if (dwRet != ERROR_SUCCESS)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
 }
