@@ -11,6 +11,8 @@ typedef struct {
 	IPAddr localIp, gatewayIp;
 	IPMask localMask;
 	BYTE localMac[6], gatewayMac[6];
+
+	BOOL hasGateway;
 }NetInfo;
 
 class NetDetector

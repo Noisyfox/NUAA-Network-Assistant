@@ -16,8 +16,10 @@ private:
 	CString m_appName, m_strDialConnect, m_strDialDisconnect;
 	CButton m_btnEnableLan, m_btnEnableRedi, m_btnEnableCampus, m_btnDial, m_btnBoot;
 	CEdit m_edtDialAccount, m_edtDialPasswd;
+	CComboBox m_comboDialMode;
 
 	void ShowNetInfo(NetInfo * info);
+	void ToggleLanFunc(BOOL hasLan);
 	BOOL CreateNotificationIcon();
 	BOOL DeleteNotificationIcon();
 

@@ -23,7 +23,7 @@ BOOL Config::Load()
 
 	GetPrivateProfileString(_T("Tydial"), _T("account"), _T(""), cfg_tAccount.GetBuffer(MAX_PATH), MAX_PATH, m_filePath);
 	GetPrivateProfileString(_T("Tydial"), _T("passwd"), _T(""), cfg_tPasswd.GetBuffer(MAX_PATH), MAX_PATH, m_filePath);
-	cfg_tDialMode = GetPrivateProfileInt(_T("Tydial"), _T("dialmode"), 0, m_filePath);
+	cfg_tDialMode = GetPrivateProfileInt(_T("Tydial"), _T("dialmode"), 1, m_filePath);
 
 	return TRUE;
 }

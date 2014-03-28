@@ -112,7 +112,12 @@ void CAdapterSelectDlg::ShowNetInfo(NetInfo * info){
 		SetDlgItemText(IDC_NETINFO_LOCIP, info->sLocalIp);
 		SetDlgItemText(IDC_NETINFO_LOCMASK, info->sLocalMask);
 		SetDlgItemText(IDC_NETINFO_GATEWAYIP, info->sGatewayIp);
-		SetDlgItemText(IDC_NETINFO_GATEWAYMAC, info->sGatewayMac);
+		if (info->hasGateway){
+			SetDlgItemText(IDC_NETINFO_GATEWAYMAC, info->sGatewayMac);
+		}
+		else{
+			SetDlgItemText(IDC_NETINFO_GATEWAYMAC, _T("00-00-00-00-00-00"));
+		}
 	}
 	else {
 		SetDlgItemText(IDC_GROUP_NETINFO, _T("获取适配器信息失败！"));

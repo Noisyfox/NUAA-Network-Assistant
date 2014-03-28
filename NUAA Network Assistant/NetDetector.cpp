@@ -141,12 +141,14 @@ BOOL NetDetector::ObtainInformation(NetInfo & info)
 
 	if (dwRetVal != NO_ERROR)
 	{
-		MessageBox(NULL, _T("解析网关 MAC 地址失败"), NULL, MB_ICONERROR);
-		return FALSE;
+		//MessageBox(NULL, _T("解析网关 MAC 地址失败"), NULL, MB_ICONERROR);
+		info.hasGateway = FALSE;
+		return TRUE;
 	}
 
 	BYTE * addr = (BYTE*)info.gatewayMac;
 	info.sGatewayMac.Format(_T("%02X-%02X-%02X-%02X-%02X-%02X"), addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]);
+	info.hasGateway = TRUE;
 
 	return TRUE;
 }

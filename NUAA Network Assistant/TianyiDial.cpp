@@ -56,11 +56,11 @@ void TianyiDial::Clean()
 	m_service_thread = NULL;
 }
 
-void DialThread(TianyiDial* dial, CString account, CString passwd)
+void DialThread(TianyiDial* dial)
 {
 	USES_CONVERSION;
 
-	dial->m_tydial.PatchAuth(-1, T2A(account), T2A(passwd));
+	dial->m_tydial.PatchAuth();
 }
 
 BOOL TianyiDial::SetDialMode(int mode)
@@ -70,10 +70,7 @@ BOOL TianyiDial::SetDialMode(int mode)
 		m_dial_mode = &TianyiDial::DialMode_Emulate;
 		break;
 	case 1:
-		m_dial_mode = &TianyiDial::DialMode_PAP_Prefix;
-		break;
-	case 2:
-		m_dial_mode = &TianyiDial::DialMode_CHAP_Postfix;
+		m_dial_mode = &TianyiDial::DialMode_Emulate_new;
 		break;
 	default:
 		return FALSE;
@@ -158,22 +155,26 @@ BOOL TianyiDial::DialMode_Emulate(NetInfo adapter, CString account, CString pass
 
 	if (!m_tydial.Init(dev_name))return FALSE;
 
-	//CString str;
-	//CString code(tysession->code.c_str());
-	//str.Format(_T("正在使用动态密码 %s 拨号..."), code);
-	//m_statusbar.SetPaneText(0, str);
-
 	if (!CreatePPPOE(TRUE))return FALSE;
 
 	RASDIALPARAMS rdParams;
 	DWORD dwRet = 0;
 	hRasConn = NULL;
 
+	CString rAccount;
+	rAccount.Format(_T("%s%s"), PAP_PREFIX, account);
+
 	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
 	rdParams.dwSize = sizeof(RASDIALPARAMS);
 	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
 	lstrcpy(rdParams.szUserName, account);
 	lstrcpy(rdParams.szPassword, passwd);
+
+	{
+		USES_CONVERSION;
+		m_tydial.PatchSetup(FALSE, -1, T2A(rAccount), T2A(passwd));
+	}
+
 
 	dwRet = RasDial(NULL, NULL, &rdParams, 0L, (RASDIALFUNC)(this->RasDialCallback), &hRasConn);
 	if (dwRet != ERROR_SUCCESS)
@@ -182,7 +183,57 @@ BOOL TianyiDial::DialMode_Emulate(NetInfo adapter, CString account, CString pass
 	}
 
 	//Create thread
-	m_service_thread = new std::thread(DialThread, this, account, passwd);
+	m_service_thread = new std::thread(DialThread, this);
+
+	return TRUE;
+}
+
+BOOL TianyiDial::DialMode_Emulate_new(NetInfo adapter, CString account, CString passwd)
+{
+	if (m_service_thread != NULL)return FALSE;
+
+	char dev_name[MAX_ADAPTER_NAME_LENGTH + 30];
+	// 用于发送数据包的适配器(名称)
+	{
+		USES_CONVERSION;
+		sprintf_s(dev_name, sizeof(dev_name), "rpcap://\\Device\\NPF_%s", T2A(adapter.sAdapterName));
+	}
+
+	m_tydial.Clean();
+	Disconnect();
+
+	if (!m_tydial.Init(dev_name))return FALSE;
+
+	if (!CreatePPPOE(TRUE))return FALSE;
+
+	RASDIALPARAMS rdParams;
+	DWORD dwRet = 0;
+	hRasConn = NULL;
+
+	CString rAccount;
+	rAccount.Format(_T("%s%s"), CHAP_PREFIX, account);
+
+	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
+	rdParams.dwSize = sizeof(RASDIALPARAMS);
+	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
+	lstrcpy(rdParams.szUserName, rAccount);
+	lstrcpy(rdParams.szPassword, passwd);
+
+	{
+		USES_CONVERSION;
+		m_tydial.PatchSetup(TRUE, -1, T2A(rAccount), T2A(passwd));
+	}
+
+	//Create thread
+	m_service_thread = new std::thread(DialThread, this);
+	//Sleep(100);
+
+	dwRet = RasDial(NULL, NULL, &rdParams, 0L, (RASDIALFUNC)(this->RasDialCallback), &hRasConn);
+	if (dwRet != ERROR_SUCCESS)
+	{
+		m_tydial.Cancel();
+		return FALSE;
+	}
 
 	return TRUE;
 }

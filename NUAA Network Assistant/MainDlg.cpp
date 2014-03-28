@@ -95,14 +95,20 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 	m_edtDialAccount = GetDlgItem(IDC_DIAL_ACCOUNT);
 	m_edtDialPasswd = GetDlgItem(IDC_DIAL_PASSWD);
 
+	m_comboDialMode = GetDlgItem(IDC_DIALMODE);
+
 	CreateNotificationIcon();
 
 	ShowNetInfo(&_NetInfo);
 
-	m_btnEnableLan.SetCheck(TRUE);
-	m_btnEnableCampus.SetCheck(TRUE);
-	SendMessage(WM_COMMAND, IDC_CHECK_ENABLELAN, NULL);
-	SendMessage(WM_COMMAND, IDC_CHECK_ENABLECAMPUS, NULL);
+	if (_NetInfo.hasGateway){
+		m_btnEnableLan.SetCheck(TRUE);
+		m_btnEnableCampus.SetCheck(TRUE);
+		SendMessage(WM_COMMAND, IDC_CHECK_ENABLELAN, NULL);
+		SendMessage(WM_COMMAND, IDC_CHECK_ENABLECAMPUS, NULL);
+	}
+
+	ToggleLanFunc(_NetInfo.hasGateway);
 
 	_TianyiDial.RegisterMessage(this->m_hWnd);
 
@@ -113,18 +119,17 @@ LRESULT CMainDlg::OnInitDialog(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam
 
 	CString dialMode;
 	dialMode.LoadString(IDS_DIALMODE);
-	CComboBox combo = GetDlgItem(IDC_DIALMODE);
 	int dialModeCount = _TianyiDial.GetDialModeCount();
 	for (int i = 1; i <= dialModeCount; i++){
 		CString _t;
 		_t.Format(_T("%s%d"), dialMode, i);
-		combo.AddString(_t);
+		m_comboDialMode.AddString(_t);
 	}
 
 	if (!_TianyiDial.SetDialMode(Config::cfg_tDialMode)){
 		Config::cfg_tDialMode = 0;
 	}
-	combo.SetCurSel(Config::cfg_tDialMode);
+	m_comboDialMode.SetCurSel(Config::cfg_tDialMode);
 
 	return TRUE;
 }
@@ -173,9 +178,17 @@ LRESULT CMainDlg::OnChangeAdapter(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl
 		_NAT.Uninstall();
 
 		_TianyiDial.RegisterMessage(this->m_hWnd);
+
+		ToggleLanFunc(_NetInfo.hasGateway);
 	}
 
 	return 0;
+}
+
+void CMainDlg::ToggleLanFunc(BOOL hasLan){
+	m_btnEnableLan.EnableWindow(hasLan);
+	m_btnEnableRedi.EnableWindow(hasLan);
+	m_btnEnableCampus.EnableWindow(hasLan);
 }
 
 LRESULT CMainDlg::OnDial(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
@@ -200,6 +213,7 @@ LRESULT CMainDlg::OnDial(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL&
 	else {
 		if (_TianyiDial.Dial(_NetInfo, account, passwd))
 		{
+			m_comboDialMode.EnableWindow(FALSE);
 			m_edtDialAccount.SetReadOnly(TRUE);
 			m_edtDialPasswd.SetReadOnly(TRUE);
 		}
@@ -358,6 +372,11 @@ LRESULT CMainDlg::OnNoti(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bH
 						 cMenu.CheckMenuItem(ID_NOTI_ENLAN, m_btnEnableLan.GetCheck() ? MF_CHECKED : MF_UNCHECKED);
 						 cMenu.CheckMenuItem(ID_NOTI_ENREDI, m_btnEnableRedi.GetCheck() ? MF_CHECKED : MF_UNCHECKED);
 						 cMenu.CheckMenuItem(ID_NOTI_ENCAMPUS, m_btnEnableCampus.GetCheck() ? MF_CHECKED : MF_UNCHECKED);
+						 if (!_NetInfo.hasGateway){
+							 cMenu.EnableMenuItem(ID_NOTI_ENLAN, MF_GRAYED);
+							 cMenu.EnableMenuItem(ID_NOTI_ENREDI, MF_GRAYED);
+							 cMenu.EnableMenuItem(ID_NOTI_ENCAMPUS, MF_GRAYED);
+						 }
 						 cMenu.TrackPopupMenu(TPM_LEFTALIGN, point.x, point.y, m_hWnd);
 						 HMENU hmenu = cMenu.Detach();
                          menu.DestroyMenu();
@@ -441,6 +460,7 @@ LRESULT CMainDlg::OnDial(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bH
 	m_btnDial.SetWindowText(m_strDialDisconnect);
 
 	if (dwError != 0 || rasconnstat == RASCS_Disconnected){
+		m_comboDialMode.EnableWindow(TRUE);
 		m_btnDial.EnableWindow(TRUE);
 		m_edtDialAccount.SetReadOnly(FALSE);
 		m_edtDialPasswd.SetReadOnly(FALSE);
@@ -459,7 +479,12 @@ void CMainDlg::ShowNetInfo(NetInfo * info){
 		SetDlgItemText(IDC_NETINFO_LOCIP, info->sLocalIp);
 		SetDlgItemText(IDC_NETINFO_LOCMASK, info->sLocalMask);
 		SetDlgItemText(IDC_NETINFO_GATEWAYIP, info->sGatewayIp);
-		SetDlgItemText(IDC_NETINFO_GATEWAYMAC, info->sGatewayMac);
+		if (info->hasGateway){
+			SetDlgItemText(IDC_NETINFO_GATEWAYMAC, info->sGatewayMac);
+		}
+		else{
+			SetDlgItemText(IDC_NETINFO_GATEWAYMAC, _T("00-00-00-00-00-00"));
+		}
 	}
 	else {
 		SetDlgItemText(IDC_NETINFO_ADAPNAME, _T(""));

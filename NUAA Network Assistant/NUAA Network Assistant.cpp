@@ -82,6 +82,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 		{
 			if (Config::cfg_firstRun)
 			{
+				MessageBox(NULL, _T("这是一个应急修复版本，仅临时修复了天翼拨号，并在没有内网连接时屏蔽了所有内网功能。\n如果在使用中遇到BUG，请耐心等待下一版本的修复。"), NULL, MB_ICONERROR);
 				//检测winpcap
 				if (!Dependency::CheckWpcap())
 				{
