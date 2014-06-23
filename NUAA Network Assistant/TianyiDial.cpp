@@ -69,9 +69,6 @@ BOOL TianyiDial::SetDialMode(int mode)
 	case 0:
 		m_dial_mode = &TianyiDial::DialMode_Emulate;
 		break;
-	case 1:
-		m_dial_mode = &TianyiDial::DialMode_Emulate_new;
-		break;
 	default:
 		return FALSE;
 	}
@@ -162,62 +159,13 @@ BOOL TianyiDial::DialMode_Emulate(NetInfo adapter, CString account, CString pass
 	hRasConn = NULL;
 
 	CString rAccount;
-	rAccount.Format(_T("%s%s"), PAP_PREFIX, account);
-
-	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
-	rdParams.dwSize = sizeof(RASDIALPARAMS);
-	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
-	lstrcpy(rdParams.szUserName, account);
-	lstrcpy(rdParams.szPassword, passwd);
-
-	{
-		USES_CONVERSION;
-		m_tydial.PatchSetup(FALSE, -1, T2A(rAccount), T2A(passwd));
-	}
-
-
-	dwRet = RasDial(NULL, NULL, &rdParams, 0L, (RASDIALFUNC)(this->RasDialCallback), &hRasConn);
-	if (dwRet != ERROR_SUCCESS)
-	{
-		return FALSE;
-	}
-
-	//Create thread
-	m_service_thread = new std::thread(DialThread, this);
-
-	return TRUE;
-}
-
-BOOL TianyiDial::DialMode_Emulate_new(NetInfo adapter, CString account, CString passwd)
-{
-	if (m_service_thread != NULL)return FALSE;
-
-	char dev_name[MAX_ADAPTER_NAME_LENGTH + 30];
-	// 用于发送数据包的适配器(名称)
-	{
-		USES_CONVERSION;
-		sprintf_s(dev_name, sizeof(dev_name), "rpcap://\\Device\\NPF_%s", T2A(adapter.sAdapterName));
-	}
-
-	m_tydial.Clean();
-	Disconnect();
-
-	if (!m_tydial.Init(dev_name))return FALSE;
-
-	if (!CreatePPPOE(TRUE))return FALSE;
-
-	RASDIALPARAMS rdParams;
-	DWORD dwRet = 0;
-	hRasConn = NULL;
-
-	CString rAccount;
 	rAccount.Format(_T("%s%s"), CHAP_PREFIX, account);
 
 	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
 	rdParams.dwSize = sizeof(RASDIALPARAMS);
 	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
-	lstrcpy(rdParams.szUserName, rAccount);
-	lstrcpy(rdParams.szPassword, passwd);
+	lstrcpy(rdParams.szUserName, _T("DebugUser"));
+	lstrcpy(rdParams.szPassword, _T("DebugPsw"));
 
 	{
 		USES_CONVERSION;
@@ -227,67 +175,12 @@ BOOL TianyiDial::DialMode_Emulate_new(NetInfo adapter, CString account, CString 
 	//Create thread
 	m_service_thread = new std::thread(DialThread, this);
 	//Sleep(100);
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 	dwRet = RasDial(NULL, NULL, &rdParams, 0L, (RASDIALFUNC)(this->RasDialCallback), &hRasConn);
 	if (dwRet != ERROR_SUCCESS)
 	{
 		m_tydial.Cancel();
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL TianyiDial::DialMode_PAP_Prefix(NetInfo adapter, CString account, CString passwd)
-{
-	Disconnect();
-
-	if (!CreatePPPOE(FALSE))return FALSE;
-
-	RASDIALPARAMS rdParams;
-	DWORD dwRet = 0;
-	hRasConn = NULL;
-	CString rAccount;
-
-	rAccount.Format(_T("%s%s"), PAP_PREFIX, account);
-
-	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
-	rdParams.dwSize = sizeof(RASDIALPARAMS);
-	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
-	lstrcpy(rdParams.szUserName, rAccount);
-	lstrcpy(rdParams.szPassword, passwd);
-
-	dwRet = RasDial(NULL, NULL, &rdParams, 0L, (RASDIALFUNC)(this->RasDialCallback), &hRasConn);
-	if (dwRet != ERROR_SUCCESS)
-	{
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-BOOL TianyiDial::DialMode_CHAP_Postfix(NetInfo adapter, CString account, CString passwd)
-{
-	Disconnect();
-
-	if (!CreatePPPOE(TRUE))return FALSE;
-
-	RASDIALPARAMS rdParams;
-	DWORD dwRet = 0;
-	hRasConn = NULL;
-	CString rAccount;
-
-	rAccount.Format(_T("%s%s"), account, CHAP_POSTFIX);
-
-	ZeroMemory(&rdParams, sizeof(RASDIALPARAMS));
-	rdParams.dwSize = sizeof(RASDIALPARAMS);
-	lstrcpy(rdParams.szEntryName, _T("Vnet_PPPoE"));
-	lstrcpy(rdParams.szUserName, rAccount);
-	lstrcpy(rdParams.szPassword, passwd);
-
-	dwRet = RasDial(NULL, NULL, &rdParams, 0L, (RASDIALFUNC)(this->RasDialCallback), &hRasConn);
-	if (dwRet != ERROR_SUCCESS)
-	{
 		return FALSE;
 	}
 

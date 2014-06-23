@@ -7,9 +7,7 @@
 #include "TyDial.hpp"
 
 #define WM_RASDIAL_UPDATE WM_USER + 103L
-#define PAP_PREFIX (_T("^~2"))
-#define CHAP_PREFIX (_T("^#01"))
-#define CHAP_POSTFIX (_T("@163.js"))
+#define CHAP_PREFIX (_T("^#02"))
 
 //typedef BOOL(TianyiDial::*DIALMODE)(NetInfo, CString, CString);
 
@@ -26,9 +24,6 @@ private:
 	static BOOL CreatePPPOE(BOOL chap);
 
 	BOOL DialMode_Emulate(NetInfo adapter, CString account, CString passwd);
-	BOOL DialMode_Emulate_new(NetInfo adapter, CString account, CString passwd);
-	BOOL DialMode_PAP_Prefix(NetInfo adapter, CString account, CString passwd);
-	BOOL DialMode_CHAP_Postfix(NetInfo adapter, CString account, CString passwd);
 
 	friend void DialThread(TianyiDial* dial);
 public:
@@ -41,7 +36,7 @@ public:
 
 	BOOL Dial(NetInfo adapter, CString account, CString passwd);
 	BOOL SetDialMode(int mode);
-	int GetDialModeCount(){ return 2; }
+	int GetDialModeCount(){ return 1; }
 	BOOL Disconnect();
 	void Clean();
 

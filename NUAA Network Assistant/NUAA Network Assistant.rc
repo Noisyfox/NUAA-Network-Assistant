@@ -104,7 +104,7 @@ CAPTION "关于"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "确定",IDOK,120,88,50,14
-    CTEXT           "NUAA Network Assistant v1.2\nquickfix\n\n(c) Copyright 2014",IDC_STATIC,4,57,78,45
+    CTEXT           "NUAA Network Assistant v1.3\nquickfix\n\n(c) Copyright 2014",IDC_STATIC,4,57,78,45
     ICON            IDR_MAINFRAME,IDC_STATIC,34,26,20,20
     GROUPBOX        "",IDC_STATIC,7,7,72,95
     LTEXT           "By Noisyfox at NUAA\n\n感谢\n\nYeahO_O Yuan\nlquterqtd\n\n的大力帮助。",IDC_STATIC,85,15,85,68
@@ -170,8 +170,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,1,1
- PRODUCTVERSION 1,2,1,1
+ FILEVERSION 1,3,1,1
+ PRODUCTVERSION 1,3,1,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -188,12 +188,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Noisyfox"
             VALUE "FileDescription", "南航网络助手"
-            VALUE "FileVersion", "1.2.1.1"
+            VALUE "FileVersion", "1.3.1.1"
             VALUE "InternalName", "NUAA Network Assistant"
             VALUE "LegalCopyright", "Copyright 2014 Noisyfox"
             VALUE "OriginalFilename", "NUAA Network Assistant.exe"
             VALUE "ProductName", "南航网络助手"
-            VALUE "ProductVersion", "1.2.1.1"
+            VALUE "ProductVersion", "1.3.1.1"
         END
     END
     BLOCK "VarFileInfo"
@@ -330,7 +330,7 @@ CAPTION "About"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,120,88,50,14
-    CTEXT           "NUAA Network Assistant v1.2\nquickfix\n\n(c) Copyright 2014",IDC_STATIC,4,57,78,45
+    CTEXT           "NUAA Network Assistant v1.3\nquickfix\n\n(c) Copyright 2014",IDC_STATIC,4,57,78,45
     ICON            IDR_MAINFRAME,IDC_STATIC,34,26,20,20
     GROUPBOX        "",IDC_STATIC,7,7,72,95
     LTEXT           "By Noisyfox at NUAA\n\nGreat thanks to\n\nYeahO_O Yuan\nlquterqtd\n\nfor their awsome work.",IDC_STATIC,85,15,85,63
@@ -454,8 +454,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,1,1
- PRODUCTVERSION 1,2,1,1
+ FILEVERSION 1,3,1,1
+ PRODUCTVERSION 1,3,1,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -472,12 +472,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Noisyfox"
             VALUE "FileDescription", "NUAA Network Assistant"
-            VALUE "FileVersion", "1.2.1.1"
+            VALUE "FileVersion", "1.3.1.1"
             VALUE "InternalName", "NUAA Network Assistant"
             VALUE "LegalCopyright", "Copyright 2014 Noisyfox"
             VALUE "OriginalFilename", "NUAA Network Assistant.exe"
             VALUE "ProductName", "NUAA Network Assistant"
-            VALUE "ProductVersion", "1.2.1.1"
+            VALUE "ProductVersion", "1.3.1.1"
         END
     END
     BLOCK "VarFileInfo"

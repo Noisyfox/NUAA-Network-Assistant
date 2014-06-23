@@ -86,7 +86,7 @@ public:
 	}
 
 	// Calculate the Standard RFC 1994 chap
-	static void ChapOrigin(u_char identifier, int challenge_len, const u_char * challenge, const char * pwd, const int pwdLen, u_char resp[16])
+	__inline static void ChapOrigin(u_char identifier, int challenge_len, const u_char * challenge, const char * pwd, const int pwdLen, u_char resp[16])
 	{
 		md5_state_t m;
 		md5_init(&m);
@@ -96,11 +96,11 @@ public:
 		md5_finish(&m, resp);
 	}
 
-	static inline uint32_t uint8to32(const uint8_t *v) {
+	__inline static uint32_t uint8to32(const uint8_t *v) {
 		return (v[3] << 24) | (v[2] << 16) | (v[1] << 8) | v[0];
 	}
 
-	static void uint32to8(uint32_t v, uint8_t *d) {
+	__inline static void uint32to8(uint32_t v, uint8_t *d) {
 		d[3] = (v >> 24) & 0xff;
 		d[2] = (v >> 16) & 0xff;
 		d[1] = (v >> 8) & 0xff;
@@ -109,7 +109,7 @@ public:
 
 #define TEA_DELTA 0x9e3779b9
 
-	static void tea(const uint8_t *k, uint8_t *v, int rounds) {
+	__inline static void tea(const uint8_t *k, uint8_t *v, int rounds) {
 		uint32_t v0 = uint8to32(v),
 			v1 = uint8to32(v + 4),
 			key[] = { uint8to32(k), uint8to32(k + 4), uint8to32(k + 8), uint8to32(k + 12) };
@@ -136,7 +136,7 @@ public:
 		uint32to8(v1, v + 4);
 	}
 
-	static void subn_1209C(const uint8_t *salt, uint8_t *resp2) {
+	__inline static void subn_1209C(const uint8_t *salt, uint8_t *resp2) {
 		uint8_t v15[256], tmp, r, tp;
 		size_t i, j;
 
@@ -164,7 +164,7 @@ public:
 		}
 	}
 
-	static void do_tyEncrypt(const uint8_t *salt, uint8_t *data) {
+	__inline static void do_tyEncrypt(const uint8_t *salt, uint8_t *data) {
 		switch (data[0] % 5) {
 		case 0:
 			tea(salt, data, 16);
@@ -191,11 +191,11 @@ public:
 	Tianyi's SecondMd5 v2.0
 	New encrypt digest
 	*/
-	static void NewChapSecondMd5(int challenge_len, u_char * challenge, u_char chap[16])
+	__inline static void NewChapSecondMd5(int challenge_len, u_char * challenge, u_char chap[16])
 	{
 		static uint8_t salt[] = {
-			0x03, 0x35, 0xac, 0x6b, 0xe4, 0xc6, 0x4d, 0xe5,
-			0xb6, 0xb3, 0xd7, 0x80, 0xe0, 0x80, 0x02, 0x30, 0x12
+			0x48, 0x6c, 0xbc, 0x84, 0xa3, 0x78, 0x2e, 0x98,
+			0xba, 0xa7, 0xfc, 0xec, 0x0e, 0x14, 0x8a, 0xc0
 		};
 
 		do_tyEncrypt(salt, chap);
@@ -242,7 +242,7 @@ public:
 				mAuthName[0] = '^';
 				mAuthName[1] = '#';
 				mAuthName[2] = '0';
-				mAuthName[3] = '1';
+				mAuthName[3] = '2';
 				strcpy(mAuthName + 4, name);
 			}
 		}
@@ -284,9 +284,8 @@ public:
 		start_time = curr_time = time(NULL);
 
 		flag_cancel = false;
-		printf("Listening...\n");
-		for (; !flag_cancel && (mTimeout <= 0 || curr_time - start_time < mTimeout);
-			curr_time = time(NULL))
+		//printf("Listening...\n");
+		for (; !flag_cancel && (mTimeout <= 0 || (curr_time = time(NULL), curr_time - start_time < mTimeout));)
 		{
 			ret = pcap_next_ex(fp, &header, &pkt_data);
 
@@ -299,7 +298,8 @@ public:
 						//if (mNameLen && mPwdLen)
 						//{
 						TakeDownChallenge(pkt_data);
-						(this->*m_patch)(pkt_data);
+						//(this->*m_patch)(pkt_data);
+						AuthWithNamePwd_new(pkt_data);
 						break;
 						//}
 					}
@@ -330,14 +330,14 @@ public:
 		flag_cancel = true;
 	}
 
-	void TakeDownChallenge(const u_char * data)
+	inline void TakeDownChallenge(const u_char * data)
 	{
 		identifier = data[23];
 		challenge_len = data[26];
 		memcpy(challenge_buf, data + 27, challenge_len);
 	}
 
-	void BuildResponseHeader(u_char * dst, const u_char * src, bool swap_dst_src)
+	inline static void BuildResponseHeader(u_char * dst, const u_char * src, bool swap_dst_src)
 	{
 		// Ethernet II
 		if (swap_dst_src)
@@ -367,7 +367,7 @@ public:
 		free(pkt);
 	}
 
-	void AuthWithNamePwd_new(const u_char * data)
+	inline void AuthWithNamePwd_new(const u_char * data)
 	{
 		int pkt_len = 43 + mNameLen;
 		u_char * pkt = (u_char*)malloc(pkt_len);
