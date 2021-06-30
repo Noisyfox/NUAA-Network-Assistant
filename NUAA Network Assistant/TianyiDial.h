@@ -1,6 +1,7 @@
 #pragma once
 
 #include <thread>
+#include <Ras.h>
 
 //屏蔽TyDial中引用的winsock
 #define _WINSOCKAPI_
@@ -8,8 +9,6 @@
 
 #define WM_RASDIAL_UPDATE WM_USER + 103L
 #define CHAP_PREFIX (_T("^#02"))
-
-//typedef BOOL(TianyiDial::*DIALMODE)(NetInfo, CString, CString);
 
 class TianyiDial
 {

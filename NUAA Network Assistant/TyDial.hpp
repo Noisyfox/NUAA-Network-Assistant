@@ -107,36 +107,65 @@ public:
 		d[0] = v & 0xff;
 	}
 
-#define TEA_DELTA 0x9e3779b9
-
-	__inline static void tea(const uint8_t *k, uint8_t *v, int rounds) {
-		uint32_t v0 = uint8to32(v),
-			v1 = uint8to32(v + 4),
-			key[] = { uint8to32(k), uint8to32(k + 4), uint8to32(k + 8), uint8to32(k + 12) };
+	__inline static void tean_encrypt(const uint8_t k[16], int rounds, uint8_t *d, size_t len) {
+		const uint32_t key[4] = {
+			uint8to32(k),
+			uint8to32(k + 4),
+			uint8to32(k + 8),
+			uint8to32(k + 12)
+		};
+		uint8_t *eod = d + len;
+		uint32_t v0, v1;
+		uint32_t delta = 0x9e3779b9;
+		uint32_t sum;
 		int i;
-		if (rounds > 0) {
-			uint32_t sum = 0;
-			for (i = 0; i != rounds; i++) {
+
+		for (d; d < eod; d += 8) {
+			v0 = uint8to32(d);
+			v1 = uint8to32(d + 4);
+
+			sum = 0;
+			for (i = 0; i != rounds; ++i) {
 				v0 += (v1 ^ sum) + key[sum & 3] + ((v1 << 4) ^ (v1 >> 5));
-				sum += TEA_DELTA;
+				sum += delta;
 				v1 += (v0 ^ sum) + key[(sum >> 11) & 3] + ((v0 << 4) ^ (v0 >> 5));
 			}
-		}
-		else {
-			rounds = -rounds;
-			uint32_t sum = TEA_DELTA * rounds;
-			for (i = 0; i != rounds; i++) {
-				v1 -= (v0 ^ sum) + key[(sum >> 11) & 3] + ((v0 << 4) ^ (v0 >> 5));
-				sum -= TEA_DELTA;
-				v0 -= (v1 ^ sum) + key[sum & 3] + ((v1 << 4) ^ (v1 >> 5));
-			}
-		}
 
-		uint32to8(v0, v);
-		uint32to8(v1, v + 4);
+			uint32to8(v0, d);
+			uint32to8(v1, d + 4);
+		}
 	}
 
-	__inline static void subn_1209C(const uint8_t *salt, uint8_t *resp2) {
+	__inline static void tean_decrypt(const uint8_t k[16], int rounds, uint8_t *d, size_t len) {
+		const uint32_t key[4] = {
+			uint8to32(k),
+			uint8to32(k + 4),
+			uint8to32(k + 8),
+			uint8to32(k + 12)
+		};
+		uint8_t *eod = d + len;
+		uint32_t v0, v1;
+		uint32_t delta = 0x9e3779b9;
+		uint32_t sum;
+		int i;
+
+		for (d; d < eod; d += 8) {
+			v0 = uint8to32(d);
+			v1 = uint8to32(d + 4);
+
+			sum = rounds * delta;
+			for (i = 0; i != rounds; ++i) {
+				v1 -= (v0 ^ sum) + key[(sum >> 11) & 3] + ((v0 << 4) ^ (v0 >> 5));
+				sum -= delta;
+				v0 -= (v1 ^ sum) + key[sum & 3] + ((v1 << 4) ^ (v1 >> 5));
+			}
+
+			uint32to8(v0, d);
+			uint32to8(v1, d + 4);
+		}
+	}
+
+	__inline static void encrypt4(const uint8_t *salt, uint8_t *resp2) {
 		uint8_t v15[256], tmp, r, tp;
 		size_t i, j;
 
@@ -167,61 +196,36 @@ public:
 	__inline static void do_tyEncrypt(const uint8_t *salt, uint8_t *data) {
 		switch (data[0] % 5) {
 		case 0:
-			tea(salt, data, 16);
-			tea(salt, data + 8, 16);
+			tean_encrypt(salt, 16, data, 16);
 			break;
 		case 1:
-			tea(salt, data, -16);
-			tea(salt, data + 8, -16);
+			tean_decrypt(salt, 16, data, 16);
 			break;
 		case 2:
-			tea(salt, data, 32);
-			tea(salt, data + 8, 32);
+			tean_encrypt(salt, 32, data, 16);
 			break;
 		case 3:
-			tea(salt, data, -32);
-			tea(salt, data + 8, -32);
+			tean_decrypt(salt, 32, data, 16);
 			break;
 		case 4:
-			subn_1209C(salt, data);
+			encrypt4(salt, data);
 			break;
 		}
 	}
+
 	/*
 	Tianyi's SecondMd5 v2.0
 	New encrypt digest
 	*/
-	__inline static void NewChapSecondMd5(int challenge_len, u_char * challenge, u_char chap[16])
+	__inline static void NewChapSecondMd5(u_char chap[16])
 	{
+		// 在这里我们要通过pdext获得salt
 		static uint8_t salt[] = {
 			0x48, 0x6c, 0xbc, 0x84, 0xa3, 0x78, 0x2e, 0x98,
 			0xba, 0xa7, 0xfc, 0xec, 0x0e, 0x14, 0x8a, 0xc0
 		};
 
 		do_tyEncrypt(salt, chap);
-	}
-
-	/*
-		Tianyi's SecondMd5 v1.7
-		Update chap with salted challenge
-		*/
-	static void ChapSecondMd5(int challenge_len, u_char * challenge, u_char chap[16])
-	{
-		int i, j;
-		u_char salt_t[] = {
-			0x38, 0xf2, 0xf8, 0xf8, 0x88, 0xe3, 0xe8, 0x99,
-			0x76, 0x12, 0xd4, 0x22, 0xa7, 0x87, 0x65, 0x23
-		};
-		md5_state_s m;
-		md5_init(&m);
-		md5_append(&m, chap, 16);
-		for (j = 0; j < challenge_len; j += 16)
-		{
-			for (i = 0; i < 16 && i + j < challenge_len; i++)
-				chap[i] = challenge[j + i] + salt_t[i];
-			md5_append(&m, chap, i);
-		}
-		md5_finish(&m, chap);
 	}
 
 	static void _PrintHex(const u_char * hex, int size)
@@ -232,9 +236,8 @@ public:
 		printf("\n");
 	}
 
-	void PatchSetup(const int newDigest, const time_t timeout, const char * name, const char * pwd){
+	void PatchSetup(const time_t timeout, const char * name, const char * pwd){
 		// 检查前缀
-		if (newDigest){
 			if (strstr(name, "^#") == name){
 				strcpy(mAuthName, name);
 			}
@@ -245,25 +248,12 @@ public:
 				mAuthName[3] = '2';
 				strcpy(mAuthName + 4, name);
 			}
-		}
-		else {
-			if (strstr(name, "^!") == name){
-				strcpy(mAuthName, name);
-			}
-			else {
-				mAuthName[0] = '^';
-				mAuthName[1] = '!';
-				mAuthName[2] = '2';
-				strcpy(mAuthName + 3, name);
-			}
-		}
+
 		strcpy(mAuthPwd, pwd);
 		mNameLen = strlen(mAuthName);
 		mPwdLen = strlen(mAuthPwd);
 
 		mTimeout = timeout;
-
-		m_patch = newDigest ? &TyDial::AuthWithNamePwd_new : &TyDial::AuthWithNamePwd;
 	}
 
 	/*
@@ -295,17 +285,8 @@ public:
 				{
 					if (pkt_data[0x16] == 1)	// Challenge packet
 					{
-						//if (mNameLen && mPwdLen)
-						//{
 						TakeDownChallenge(pkt_data);
-						//(this->*m_patch)(pkt_data);
 						AuthWithNamePwd_new(pkt_data);
-						break;
-						//}
-					}
-					else if (pkt_data[0x16] == 2)	// Response packet
-					{
-						AuthWithChap(pkt_data);
 						break;
 					}
 				}
@@ -354,45 +335,16 @@ public:
 		dst[22] = 2;	// Code: Response
 	}
 
-	void AuthWithNamePwd(const u_char * data)
-	{
-		int pkt_len = 43 + mNameLen;
-		u_char * pkt = (u_char*)malloc(pkt_len);
-		BuildResponseHeader(pkt, data, true);
-		ChapOrigin(identifier, challenge_len, challenge_buf, mAuthPwd, mPwdLen, pkt + 27);
-		ChapSecondMd5(challenge_len, challenge_buf, pkt + 27);
-		memcpy(pkt + 43, mAuthName, mNameLen);
-		UpdateLengthAndSend(pkt, mNameLen);
-		//_PrintHex(pkt + 27, 16);
-		free(pkt);
-	}
-
 	inline void AuthWithNamePwd_new(const u_char * data)
 	{
 		int pkt_len = 43 + mNameLen;
 		u_char * pkt = (u_char*)malloc(pkt_len);
 		BuildResponseHeader(pkt, data, true);
 		ChapOrigin(identifier, challenge_len, challenge_buf, mAuthPwd, mPwdLen, pkt + 27);
-		NewChapSecondMd5(challenge_len, challenge_buf, pkt + 27);
+		NewChapSecondMd5(pkt + 27);
 		memcpy(pkt + 43, mAuthName, mNameLen);
 		UpdateLengthAndSend(pkt, mNameLen);
 		//_PrintHex(pkt + 27, 16);
-		free(pkt);
-	}
-
-	void AuthWithChap(const u_char * data)
-	{
-		int name_len = (data[24] << 8) + data[25] - data[26] - 5;
-		u_char * pkt = (u_char*)malloc(43 + 3 + name_len);
-		memcpy(pkt, data, 43);
-		ChapSecondMd5(challenge_len, challenge_buf, pkt + 27);
-		if (data[43] != '^' && data[44] != '~')
-		{
-			name_len += 3;
-			pkt[43] = '^'; pkt[44] = '~'; pkt[45] = '2';
-			memcpy(pkt + 46, data + 43, name_len);
-		}
-		UpdateLengthAndSend(pkt, name_len);
 		free(pkt);
 	}
 
@@ -433,7 +385,6 @@ private:
 	int mPwdLen = 0;
 	char mAuthName[255];
 	char mAuthPwd[255];
-	void(TyDial::*m_patch)(const u_char *);
 };
 
 #endif

@@ -58,8 +58,6 @@ void TianyiDial::Clean()
 
 void DialThread(TianyiDial* dial)
 {
-	USES_CONVERSION;
-
 	dial->m_tydial.PatchAuth();
 }
 
@@ -169,7 +167,7 @@ BOOL TianyiDial::DialMode_Emulate(NetInfo adapter, CString account, CString pass
 
 	{
 		USES_CONVERSION;
-		m_tydial.PatchSetup(TRUE, -1, T2A(rAccount), T2A(passwd));
+		m_tydial.PatchSetup(-1, T2A(rAccount), T2A(passwd));
 	}
 
 	//Create thread
